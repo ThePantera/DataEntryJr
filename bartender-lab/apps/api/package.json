@@ -20,7 +20,8 @@
     "db:seed": "prisma db seed",
     "db:reset": "prisma migrate reset --force",
     "manifest:rebuild": "tsx scripts/rebuild-manifest.ts",
-    "openapi:export": "npm run build && node dist/scripts/export-openapi.js"
+    "openapi:export": "npm run build && node dist/scripts/export-openapi.js",
+    "catalog:export": "tsx scripts/export-catalog.ts"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"

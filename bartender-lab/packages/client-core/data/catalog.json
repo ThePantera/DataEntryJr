@@ -1,0 +1,970 @@
+{
+  "formatVersion": 1,
+  "categories": [
+    {
+      "id": "588edb2f-ae88-553b-8dfe-fd9d473ceb9e",
+      "name": "Destilados",
+      "description": null,
+      "kind": "INGREDIENT",
+      "version": 1
+    },
+    {
+      "id": "a13cd349-b949-56f7-bc1e-3d04c37b5a9f",
+      "name": "Licores",
+      "description": null,
+      "kind": "INGREDIENT",
+      "version": 1
+    },
+    {
+      "id": "a1cd4292-952e-550b-8cac-51a0f92a230a",
+      "name": "Vermuts y aperitivos",
+      "description": null,
+      "kind": "INGREDIENT",
+      "version": 1
+    },
+    {
+      "id": "00403e85-1904-5595-a39b-0c6b7d26b0e9",
+      "name": "Amargos",
+      "description": null,
+      "kind": "INGREDIENT",
+      "version": 1
+    },
+    {
+      "id": "cc0a7649-52b4-5e01-8f52-9c95a7c28870",
+      "name": "Jugos y cítricos",
+      "description": null,
+      "kind": "INGREDIENT",
+      "version": 1
+    },
+    {
+      "id": "584853ea-28be-596c-b9b8-3135addcaba9",
+      "name": "Endulzantes",
+      "description": null,
+      "kind": "INGREDIENT",
+      "version": 1
+    },
+    {
+      "id": "a3192a0d-184b-555f-8e60-ba41b859ed0e",
+      "name": "Hierbas",
+      "description": null,
+      "kind": "INGREDIENT",
+      "version": 1
+    },
+    {
+      "id": "d67a8e4a-f37c-58d7-83a6-7970e321ac4f",
+      "name": "Mezcladores",
+      "description": null,
+      "kind": "INGREDIENT",
+      "version": 1
+    },
+    {
+      "id": "815a7cb6-b2a1-5b82-bca9-56d51dfdbc5e",
+      "name": "Otros",
+      "description": null,
+      "kind": "INGREDIENT",
+      "version": 1
+    },
+    {
+      "id": "a8acc8fc-23ae-580b-8883-04adc54f276e",
+      "name": "IBA: The Unforgettables",
+      "description": "Categoría oficial de la IBA.",
+      "kind": "RECIPE",
+      "version": 1
+    },
+    {
+      "id": "c857001c-ebe8-5cd0-9307-d8108405fdd0",
+      "name": "IBA: Contemporary Classics",
+      "description": "Categoría oficial de la IBA.",
+      "kind": "RECIPE",
+      "version": 1
+    },
+    {
+      "id": "6ad42912-b971-54b1-afe8-d5e37b3fb433",
+      "name": "Sours",
+      "description": "Destilado, cítrico y endulzante.",
+      "kind": "RECIPE",
+      "version": 1
+    },
+    {
+      "id": "0645418c-facc-5473-b6f8-27f65780fe46",
+      "name": "Spirit-forward",
+      "description": "Predominio del destilado; sin cítricos.",
+      "kind": "RECIPE",
+      "version": 1
+    },
+    {
+      "id": "63a58f0f-5316-50ec-969a-b0b5c7f951fe",
+      "name": "Highballs",
+      "description": "Servidos largos con un mezclador.",
+      "kind": "RECIPE",
+      "version": 1
+    }
+  ],
+  "ingredients": [
+    {
+      "id": "309089c5-c922-58d2-bf06-1f194cafa93c",
+      "name": "Gin",
+      "description": null,
+      "categoryId": "588edb2f-ae88-553b-8dfe-fd9d473ceb9e",
+      "alcoholPercentage": 40,
+      "imageUrl": null,
+      "allergens": [],
+      "version": 1
+    },
+    {
+      "id": "c370230a-c128-5f7b-b100-7a5c51cae1f5",
+      "name": "Ron blanco",
+      "description": null,
+      "categoryId": "588edb2f-ae88-553b-8dfe-fd9d473ceb9e",
+      "alcoholPercentage": 40,
+      "imageUrl": null,
+      "allergens": [],
+      "version": 1
+    },
+    {
+      "id": "8df7a364-9d70-5bc2-9463-69fe40688df4",
+      "name": "Tequila 100% agave",
+      "description": null,
+      "categoryId": "588edb2f-ae88-553b-8dfe-fd9d473ceb9e",
+      "alcoholPercentage": 40,
+      "imageUrl": null,
+      "allergens": [],
+      "version": 1
+    },
+    {
+      "id": "45d0b569-718c-5d2b-a09f-3a7c2c68d909",
+      "name": "Bourbon",
+      "description": null,
+      "categoryId": "588edb2f-ae88-553b-8dfe-fd9d473ceb9e",
+      "alcoholPercentage": 40,
+      "imageUrl": null,
+      "allergens": [],
+      "version": 1
+    },
+    {
+      "id": "b854dfb6-a025-5eae-aa78-81f8c5eb807c",
+      "name": "Whiskey de centeno",
+      "description": "Rye whiskey.",
+      "categoryId": "588edb2f-ae88-553b-8dfe-fd9d473ceb9e",
+      "alcoholPercentage": 40,
+      "imageUrl": null,
+      "allergens": [],
+      "version": 1
+    },
+    {
+      "id": "8983ec09-419f-5083-8543-737d0535e5f8",
+      "name": "Triple sec",
+      "description": "Licor de naranja.",
+      "categoryId": "a13cd349-b949-56f7-bc1e-3d04c37b5a9f",
+      "alcoholPercentage": 40,
+      "imageUrl": null,
+      "allergens": [],
+      "version": 1
+    },
+    {
+      "id": "3afcc639-d037-58e4-8782-154537d5993f",
+      "name": "Campari",
+      "description": null,
+      "categoryId": "a1cd4292-952e-550b-8cac-51a0f92a230a",
+      "alcoholPercentage": 25,
+      "imageUrl": null,
+      "allergens": [],
+      "version": 1
+    },
+    {
+      "id": "d3af1af7-fe9f-592d-b7b5-84810bbff3b8",
+      "name": "Vermut rojo",
+      "description": "Vermut dulce (rosso).",
+      "categoryId": "a1cd4292-952e-550b-8cac-51a0f92a230a",
+      "alcoholPercentage": 16,
+      "imageUrl": null,
+      "allergens": ["SULPHITES"],
+      "version": 1
+    },
+    {
+      "id": "ec7dec58-3d14-5794-b00c-7a362f4c9835",
+      "name": "Amargo de Angostura",
+      "description": null,
+      "categoryId": "00403e85-1904-5595-a39b-0c6b7d26b0e9",
+      "alcoholPercentage": 44.7,
+      "imageUrl": null,
+      "allergens": [],
+      "version": 1
+    },
+    {
+      "id": "55d4b072-ca21-53d8-b1c0-f1c7645ca23b",
+      "name": "Jugo de lima",
+      "description": "Recién exprimido.",
+      "categoryId": "cc0a7649-52b4-5e01-8f52-9c95a7c28870",
+      "alcoholPercentage": 0,
+      "imageUrl": null,
+      "allergens": [],
+      "version": 1
+    },
+    {
+      "id": "9f50c68f-a5ef-537a-a442-56f4cd7901a5",
+      "name": "Jugo de limón",
+      "description": "Recién exprimido.",
+      "categoryId": "cc0a7649-52b4-5e01-8f52-9c95a7c28870",
+      "alcoholPercentage": 0,
+      "imageUrl": null,
+      "allergens": [],
+      "version": 1
+    },
+    {
+      "id": "c16d7202-727f-5109-ba2b-0720a5d5597b",
+      "name": "Jarabe simple",
+      "description": "Azúcar y agua.",
+      "categoryId": "584853ea-28be-596c-b9b8-3135addcaba9",
+      "alcoholPercentage": 0,
+      "imageUrl": null,
+      "allergens": [],
+      "version": 1
+    },
+    {
+      "id": "7ebc2c37-816a-5077-b46a-a3f50493d00d",
+      "name": "Azúcar extrafina",
+      "description": null,
+      "categoryId": "584853ea-28be-596c-b9b8-3135addcaba9",
+      "alcoholPercentage": 0,
+      "imageUrl": null,
+      "allergens": [],
+      "version": 1
+    },
+    {
+      "id": "06e78db2-a38d-570a-82ae-69ee5ab1923f",
+      "name": "Azúcar blanca de caña",
+      "description": null,
+      "categoryId": "584853ea-28be-596c-b9b8-3135addcaba9",
+      "alcoholPercentage": 0,
+      "imageUrl": null,
+      "allergens": [],
+      "version": 1
+    },
+    {
+      "id": "efcff878-387a-5a10-bb3a-7cc414ab8752",
+      "name": "Menta",
+      "description": "Hojas frescas (hierbabuena).",
+      "categoryId": "a3192a0d-184b-555f-8e60-ba41b859ed0e",
+      "alcoholPercentage": 0,
+      "imageUrl": null,
+      "allergens": [],
+      "version": 1
+    },
+    {
+      "id": "7573d24c-a52f-5ad7-8866-85b90b618086",
+      "name": "Agua con gas",
+      "description": "Soda.",
+      "categoryId": "d67a8e4a-f37c-58d7-83a6-7970e321ac4f",
+      "alcoholPercentage": 0,
+      "imageUrl": null,
+      "allergens": [],
+      "version": 1
+    }
+  ],
+  "glassware": [
+    {
+      "id": "10134175-1972-5637-9c6a-17d7fd989d1b",
+      "name": "Copa de cóctel",
+      "description": "Copa con pie para tragos servidos sin hielo.",
+      "capacityMl": null,
+      "imageUrl": null,
+      "version": 1
+    },
+    {
+      "id": "b8e34438-250d-524e-b460-49357074efe8",
+      "name": "Vaso old fashioned",
+      "description": "Vaso bajo (rocks).",
+      "capacityMl": null,
+      "imageUrl": null,
+      "version": 1
+    },
+    {
+      "id": "59d4b4bb-2dbe-598a-8500-80b6ee8bb94b",
+      "name": "Vaso highball",
+      "description": "Vaso alto para tragos largos.",
+      "capacityMl": null,
+      "imageUrl": null,
+      "version": 1
+    }
+  ],
+  "equipment": [
+    {
+      "id": "f128cbba-3f91-5e1f-a2c2-4ce6d2b4fc6a",
+      "name": "Coctelera",
+      "description": "Para batir con hielo.",
+      "imageUrl": null,
+      "version": 1
+    },
+    {
+      "id": "94d8f69a-84ea-53c7-bd4b-5bf6858586ca",
+      "name": "Colador Hawthorne",
+      "description": "Colador con resorte.",
+      "imageUrl": null,
+      "version": 1
+    },
+    {
+      "id": "531c4834-8cb4-54c7-8b73-fae09ac806cc",
+      "name": "Vaso mezclador",
+      "description": "Para remover con hielo.",
+      "imageUrl": null,
+      "version": 1
+    },
+    {
+      "id": "91395242-9a7e-55b4-b376-da823a86b0c2",
+      "name": "Cuchara de bar",
+      "description": "Cuchara de mango largo.",
+      "imageUrl": null,
+      "version": 1
+    },
+    {
+      "id": "86e23052-7dc3-5584-aaf5-071ac7caeac7",
+      "name": "Colador julep",
+      "description": "Colador perforado para vaso mezclador.",
+      "imageUrl": null,
+      "version": 1
+    },
+    {
+      "id": "9d8b58e3-87a2-5079-9fe2-909956d843c6",
+      "name": "Medidor (jigger)",
+      "description": "Para medir cantidades.",
+      "imageUrl": null,
+      "version": 1
+    },
+    {
+      "id": "84f33c7a-99f0-5e31-9a0b-fd090d28a213",
+      "name": "Majador",
+      "description": "Para macerar frutas y hierbas.",
+      "imageUrl": null,
+      "version": 1
+    }
+  ],
+  "techniques": [
+    {
+      "id": "0c1591fd-dcc7-5db0-bce3-cf602f1922df",
+      "name": "Batido",
+      "description": "Agitar los ingredientes con hielo para enfriar, diluir y airear. Habitualmente entre 10 y 15 segundos.",
+      "durationSeconds": 15,
+      "instructions": "Medir los ingredientes en la coctelera, llenarla de hielo, cerrarla bien y agitar con energía. Colar en el vaso.",
+      "commonMistakes": [
+        "Usar poco hielo, lo que diluye de más y enfría de menos.",
+        "No cerrar bien la coctelera.",
+        "Batir tragos que solo llevan destilados y modificadores, que suelen removerse."
+      ],
+      "equipmentIds": [
+        "f128cbba-3f91-5e1f-a2c2-4ce6d2b4fc6a",
+        "94d8f69a-84ea-53c7-bd4b-5bf6858586ca",
+        "9d8b58e3-87a2-5079-9fe2-909956d843c6"
+      ],
+      "version": 1
+    },
+    {
+      "id": "e720e7ac-621c-58f5-94e8-dca06748b893",
+      "name": "Refrescado (removido)",
+      "description": "Remover con hielo en el vaso mezclador para enfriar y diluir sin airear. Habitualmente entre 20 y 30 segundos.",
+      "durationSeconds": 30,
+      "instructions": "Medir los ingredientes en el vaso mezclador, llenarlo de hielo y remover con la cuchara de bar. Colar en el vaso frío.",
+      "commonMistakes": [
+        "Remover con poco hielo.",
+        "Remover demasiado y diluir en exceso.",
+        "No enfriar previamente el vaso de servicio."
+      ],
+      "equipmentIds": [
+        "531c4834-8cb4-54c7-8b73-fae09ac806cc",
+        "91395242-9a7e-55b4-b376-da823a86b0c2",
+        "86e23052-7dc3-5584-aaf5-071ac7caeac7",
+        "9d8b58e3-87a2-5079-9fe2-909956d843c6"
+      ],
+      "version": 1
+    },
+    {
+      "id": "518d751d-9c64-5cf0-a039-773974c8df9b",
+      "name": "Directo",
+      "description": "Construir el trago directamente en el vaso de servicio.",
+      "durationSeconds": null,
+      "instructions": "Llenar el vaso con hielo, verter los ingredientes y remover suavemente para integrarlos.",
+      "commonMistakes": [
+        "No remover, dejando los ingredientes sin integrar.",
+        "Usar hielo de mala calidad."
+      ],
+      "equipmentIds": [
+        "91395242-9a7e-55b4-b376-da823a86b0c2",
+        "9d8b58e3-87a2-5079-9fe2-909956d843c6"
+      ],
+      "version": 1
+    },
+    {
+      "id": "8f849dec-6cf7-5bab-9e1e-707fa4071a01",
+      "name": "Macerado",
+      "description": "Presionar hierbas, frutas o azúcar para extraer aromas y jugos.",
+      "durationSeconds": null,
+      "instructions": "Presionar suavemente con el majador en el fondo del vaso; no triturar las hierbas.",
+      "commonMistakes": ["Triturar la menta, lo que libera amargor.", "Usar un majador barnizado."],
+      "equipmentIds": [
+        "84f33c7a-99f0-5e31-9a0b-fd090d28a213",
+        "91395242-9a7e-55b4-b376-da823a86b0c2"
+      ],
+      "version": 1
+    }
+  ],
+  "recipes": [
+    {
+      "id": "f060609e-a6e2-5d22-b6a7-13eabc77aa41",
+      "name": "Negroni",
+      "slug": "negroni",
+      "description": "Partes iguales de gin, Campari y vermut rojo.",
+      "history": null,
+      "difficulty": "EASY",
+      "preparationTimeSeconds": null,
+      "servings": 1,
+      "glasswareId": "b8e34438-250d-524e-b460-49357074efe8",
+      "techniqueId": "518d751d-9c64-5cf0-a039-773974c8df9b",
+      "iceType": "CUBED",
+      "garnish": "Media rodaja de naranja",
+      "alcoholPercentageEstimated": null,
+      "instructions": "Verter todos los ingredientes en un vaso old fashioned con hielo y remover suavemente.",
+      "imageUrl": null,
+      "source": "IBA Official Cocktails (iba-world.com)",
+      "origin": "CLASSIC",
+      "version": 1,
+      "categoryIds": [
+        "a8acc8fc-23ae-580b-8883-04adc54f276e",
+        "0645418c-facc-5473-b6f8-27f65780fe46"
+      ],
+      "ingredients": [
+        {
+          "id": "723e5573-8e71-5ea3-b286-9d74be9fdae6",
+          "ingredientId": "309089c5-c922-58d2-bf06-1f194cafa93c",
+          "quantity": 30,
+          "unit": "ML",
+          "optional": false,
+          "position": 0
+        },
+        {
+          "id": "40fa4888-bdee-52be-affd-12e121b24ed9",
+          "ingredientId": "3afcc639-d037-58e4-8782-154537d5993f",
+          "quantity": 30,
+          "unit": "ML",
+          "optional": false,
+          "position": 1
+        },
+        {
+          "id": "f02a75b7-bef6-5fab-9c7a-679462a4e2b3",
+          "ingredientId": "d3af1af7-fe9f-592d-b7b5-84810bbff3b8",
+          "quantity": 30,
+          "unit": "ML",
+          "optional": false,
+          "position": 2
+        }
+      ],
+      "steps": [
+        {
+          "id": "01e9f63c-0134-56a6-8b30-c8eac653d1b2",
+          "stepNumber": 1,
+          "instruction": "Llenar un vaso old fashioned con hielo.",
+          "durationSeconds": null,
+          "imageUrl": null
+        },
+        {
+          "id": "7f6f77da-3431-51e1-ab3b-f80286460365",
+          "stepNumber": 2,
+          "instruction": "Verter el gin, el Campari y el vermut rojo.",
+          "durationSeconds": null,
+          "imageUrl": null
+        },
+        {
+          "id": "d96288e3-aade-53e2-bdcf-a17bb4f0065f",
+          "stepNumber": 3,
+          "instruction": "Remover suavemente.",
+          "durationSeconds": null,
+          "imageUrl": null
+        },
+        {
+          "id": "efb360f9-e918-5a84-8495-28e8ed0934bd",
+          "stepNumber": 4,
+          "instruction": "Decorar con media rodaja de naranja.",
+          "durationSeconds": null,
+          "imageUrl": null
+        }
+      ]
+    },
+    {
+      "id": "d24e686e-126f-5a7d-9f7c-31ef8106ca7b",
+      "name": "Daiquiri",
+      "slug": "daiquiri",
+      "description": "Ron blanco, lima y azúcar.",
+      "history": null,
+      "difficulty": "EASY",
+      "preparationTimeSeconds": null,
+      "servings": 1,
+      "glasswareId": "10134175-1972-5637-9c6a-17d7fd989d1b",
+      "techniqueId": "0c1591fd-dcc7-5db0-bce3-cf602f1922df",
+      "iceType": "NONE",
+      "garnish": null,
+      "alcoholPercentageEstimated": null,
+      "instructions": "Disolver el azúcar en la coctelera con el ron y la lima, batir con hielo y colar en copa fría.",
+      "imageUrl": null,
+      "source": "IBA Official Cocktails (iba-world.com)",
+      "origin": "CLASSIC",
+      "version": 1,
+      "categoryIds": [
+        "a8acc8fc-23ae-580b-8883-04adc54f276e",
+        "6ad42912-b971-54b1-afe8-d5e37b3fb433"
+      ],
+      "ingredients": [
+        {
+          "id": "016ab50f-28f3-5925-9551-a7bb5aeafe61",
+          "ingredientId": "c370230a-c128-5f7b-b100-7a5c51cae1f5",
+          "quantity": 60,
+          "unit": "ML",
+          "optional": false,
+          "position": 0
+        },
+        {
+          "id": "e1ea9157-b06b-5d3a-b8d6-195c03c9bc25",
+          "ingredientId": "55d4b072-ca21-53d8-b1c0-f1c7645ca23b",
+          "quantity": 20,
+          "unit": "ML",
+          "optional": false,
+          "position": 1
+        },
+        {
+          "id": "2482b674-5026-53ef-8f53-8b354178c616",
+          "ingredientId": "7ebc2c37-816a-5077-b46a-a3f50493d00d",
+          "quantity": 2,
+          "unit": "BARSPOON",
+          "optional": false,
+          "position": 2
+        }
+      ],
+      "steps": [
+        {
+          "id": "1cadb4d7-7de6-51e1-82ca-7f73898e0ab8",
+          "stepNumber": 1,
+          "instruction": "Poner todos los ingredientes en la coctelera y remover para disolver el azúcar.",
+          "durationSeconds": null,
+          "imageUrl": null
+        },
+        {
+          "id": "7541d3fb-3870-5f90-832a-c4c62769cdb4",
+          "stepNumber": 2,
+          "instruction": "Añadir hielo y batir.",
+          "durationSeconds": null,
+          "imageUrl": null
+        },
+        {
+          "id": "9cf0a945-e592-5b76-8e04-6ac2bd7ac44a",
+          "stepNumber": 3,
+          "instruction": "Colar en una copa de cóctel fría.",
+          "durationSeconds": null,
+          "imageUrl": null
+        }
+      ]
+    },
+    {
+      "id": "e677b605-d0c5-5a25-b5c7-1acd772ed981",
+      "name": "Margarita",
+      "slug": "margarita",
+      "description": "Tequila, triple sec y lima.",
+      "history": null,
+      "difficulty": "MEDIUM",
+      "preparationTimeSeconds": null,
+      "servings": 1,
+      "glasswareId": "10134175-1972-5637-9c6a-17d7fd989d1b",
+      "techniqueId": "0c1591fd-dcc7-5db0-bce3-cf602f1922df",
+      "iceType": "NONE",
+      "garnish": "Media corona de sal (opcional)",
+      "alcoholPercentageEstimated": null,
+      "instructions": "Batir todos los ingredientes con hielo y colar en copa fría.",
+      "imageUrl": null,
+      "source": "IBA Official Cocktails (iba-world.com)",
+      "origin": "CLASSIC",
+      "version": 1,
+      "categoryIds": [
+        "c857001c-ebe8-5cd0-9307-d8108405fdd0",
+        "6ad42912-b971-54b1-afe8-d5e37b3fb433"
+      ],
+      "ingredients": [
+        {
+          "id": "4faacb1a-c93e-5813-b220-bc46ebdbbc92",
+          "ingredientId": "8df7a364-9d70-5bc2-9463-69fe40688df4",
+          "quantity": 50,
+          "unit": "ML",
+          "optional": false,
+          "position": 0
+        },
+        {
+          "id": "bf59e088-28cc-5d89-be50-99f1fb85f62c",
+          "ingredientId": "8983ec09-419f-5083-8543-737d0535e5f8",
+          "quantity": 20,
+          "unit": "ML",
+          "optional": false,
+          "position": 1
+        },
+        {
+          "id": "fb529d83-a658-5882-9e2d-c6b694b583d4",
+          "ingredientId": "55d4b072-ca21-53d8-b1c0-f1c7645ca23b",
+          "quantity": 15,
+          "unit": "ML",
+          "optional": false,
+          "position": 2
+        }
+      ],
+      "steps": [
+        {
+          "id": "fafc361b-0b8c-569e-a5bb-3fac88dcc862",
+          "stepNumber": 1,
+          "instruction": "Si se desea, escarchar con sal la mitad del borde de la copa.",
+          "durationSeconds": null,
+          "imageUrl": null
+        },
+        {
+          "id": "36353763-9bf7-530b-915d-3d16b52c932d",
+          "stepNumber": 2,
+          "instruction": "Batir todos los ingredientes con hielo.",
+          "durationSeconds": null,
+          "imageUrl": null
+        },
+        {
+          "id": "e6df73ea-33d4-5588-8566-42bad54c501b",
+          "stepNumber": 3,
+          "instruction": "Colar en la copa fría.",
+          "durationSeconds": null,
+          "imageUrl": null
+        }
+      ]
+    },
+    {
+      "id": "538927b6-6a44-50f8-a4ef-c3a92961de75",
+      "name": "Manhattan",
+      "slug": "manhattan",
+      "description": "Whiskey de centeno, vermut rojo y amargo de Angostura.",
+      "history": null,
+      "difficulty": "MEDIUM",
+      "preparationTimeSeconds": null,
+      "servings": 1,
+      "glasswareId": "10134175-1972-5637-9c6a-17d7fd989d1b",
+      "techniqueId": "e720e7ac-621c-58f5-94e8-dca06748b893",
+      "iceType": "NONE",
+      "garnish": "Cereza de cóctel",
+      "alcoholPercentageEstimated": null,
+      "instructions": "Remover con hielo en el vaso mezclador y colar en copa fría.",
+      "imageUrl": null,
+      "source": "IBA Official Cocktails (iba-world.com)",
+      "origin": "CLASSIC",
+      "version": 1,
+      "categoryIds": [
+        "a8acc8fc-23ae-580b-8883-04adc54f276e",
+        "0645418c-facc-5473-b6f8-27f65780fe46"
+      ],
+      "ingredients": [
+        {
+          "id": "edee51a1-fb32-5501-a2fe-0f040d5af440",
+          "ingredientId": "b854dfb6-a025-5eae-aa78-81f8c5eb807c",
+          "quantity": 50,
+          "unit": "ML",
+          "optional": false,
+          "position": 0
+        },
+        {
+          "id": "7db4b360-6302-5d3b-b24c-3153326d8a11",
+          "ingredientId": "d3af1af7-fe9f-592d-b7b5-84810bbff3b8",
+          "quantity": 20,
+          "unit": "ML",
+          "optional": false,
+          "position": 1
+        },
+        {
+          "id": "68cb0e88-23db-5f27-961d-90075419e3f3",
+          "ingredientId": "ec7dec58-3d14-5794-b00c-7a362f4c9835",
+          "quantity": 1,
+          "unit": "DASH",
+          "optional": false,
+          "position": 2
+        }
+      ],
+      "steps": [
+        {
+          "id": "72e4daca-c0fa-5eb6-89aa-efc45a9ee3b8",
+          "stepNumber": 1,
+          "instruction": "Verter todos los ingredientes en el vaso mezclador con hielo.",
+          "durationSeconds": null,
+          "imageUrl": null
+        },
+        {
+          "id": "01f6c40d-d3ad-5556-8de0-23243c0f3905",
+          "stepNumber": 2,
+          "instruction": "Remover bien.",
+          "durationSeconds": null,
+          "imageUrl": null
+        },
+        {
+          "id": "2485c6c4-ed8e-575f-a9d8-eb89eac85319",
+          "stepNumber": 3,
+          "instruction": "Colar en una copa de cóctel fría.",
+          "durationSeconds": null,
+          "imageUrl": null
+        },
+        {
+          "id": "34c56e12-7e33-542b-9ed0-5ec566f8a596",
+          "stepNumber": 4,
+          "instruction": "Decorar con una cereza de cóctel.",
+          "durationSeconds": null,
+          "imageUrl": null
+        }
+      ]
+    },
+    {
+      "id": "b1aba043-4fba-5793-94ba-1fe57601ded4",
+      "name": "Mojito",
+      "slug": "mojito",
+      "description": "Ron blanco, lima, menta, azúcar y soda.",
+      "history": null,
+      "difficulty": "MEDIUM",
+      "preparationTimeSeconds": null,
+      "servings": 1,
+      "glasswareId": "59d4b4bb-2dbe-598a-8500-80b6ee8bb94b",
+      "techniqueId": "8f849dec-6cf7-5bab-9e1e-707fa4071a01",
+      "iceType": "CRUSHED",
+      "garnish": "Rama de menta",
+      "alcoholPercentageEstimated": null,
+      "instructions": "Macerar la menta con el azúcar y la lima, añadir hielo picado y el ron, y completar con soda.",
+      "imageUrl": null,
+      "source": "IBA Official Cocktails (iba-world.com)",
+      "origin": "CLASSIC",
+      "version": 1,
+      "categoryIds": [
+        "c857001c-ebe8-5cd0-9307-d8108405fdd0",
+        "63a58f0f-5316-50ec-969a-b0b5c7f951fe"
+      ],
+      "ingredients": [
+        {
+          "id": "19d8439d-a955-57c7-8d53-02cb6b23f640",
+          "ingredientId": "c370230a-c128-5f7b-b100-7a5c51cae1f5",
+          "quantity": 45,
+          "unit": "ML",
+          "optional": false,
+          "position": 0
+        },
+        {
+          "id": "87fb856c-c95b-5094-9119-f6b305b7b9e4",
+          "ingredientId": "55d4b072-ca21-53d8-b1c0-f1c7645ca23b",
+          "quantity": 20,
+          "unit": "ML",
+          "optional": false,
+          "position": 1
+        },
+        {
+          "id": "89afb40b-8cfd-5bf4-9428-3db11460aeba",
+          "ingredientId": "efcff878-387a-5a10-bb3a-7cc414ab8752",
+          "quantity": 6,
+          "unit": "SPRIG",
+          "optional": false,
+          "position": 2
+        },
+        {
+          "id": "15187a0e-ab65-50c6-8a74-59db859628e8",
+          "ingredientId": "06e78db2-a38d-570a-82ae-69ee5ab1923f",
+          "quantity": 2,
+          "unit": "TEASPOON",
+          "optional": false,
+          "position": 3
+        },
+        {
+          "id": "6a0546e0-5cc7-5b39-9b2f-3c39f0517f57",
+          "ingredientId": "7573d24c-a52f-5ad7-8866-85b90b618086",
+          "quantity": null,
+          "unit": "TOP_UP",
+          "optional": false,
+          "position": 4
+        }
+      ],
+      "steps": [
+        {
+          "id": "76d91207-0c75-504b-9ab3-67fbac09e4c9",
+          "stepNumber": 1,
+          "instruction": "Macerar suavemente la menta con el azúcar y el jugo de lima en el vaso.",
+          "durationSeconds": null,
+          "imageUrl": null
+        },
+        {
+          "id": "0129febd-913c-5236-8965-75882f5cdb1b",
+          "stepNumber": 2,
+          "instruction": "Añadir un chorro de soda y llenar el vaso con hielo picado.",
+          "durationSeconds": null,
+          "imageUrl": null
+        },
+        {
+          "id": "4e06d224-6a98-56f2-af72-886ec1a7ef4b",
+          "stepNumber": 3,
+          "instruction": "Verter el ron y completar con soda.",
+          "durationSeconds": null,
+          "imageUrl": null
+        },
+        {
+          "id": "0b55e935-b4b8-5f13-8bbe-1e48bb4b8929",
+          "stepNumber": 4,
+          "instruction": "Decorar con una rama de menta y servir con pajita.",
+          "durationSeconds": null,
+          "imageUrl": null
+        }
+      ]
+    },
+    {
+      "id": "be7086d7-e34e-5b89-bed3-cd9b3bb03c5d",
+      "name": "Whiskey Sour",
+      "slug": "whiskey-sour",
+      "description": "Bourbon, limón y jarabe. La IBA admite clara de huevo opcional.",
+      "history": null,
+      "difficulty": "MEDIUM",
+      "preparationTimeSeconds": null,
+      "servings": 1,
+      "glasswareId": "b8e34438-250d-524e-b460-49357074efe8",
+      "techniqueId": "0c1591fd-dcc7-5db0-bce3-cf602f1922df",
+      "iceType": "CUBED",
+      "garnish": "Media rodaja de naranja y cereza",
+      "alcoholPercentageEstimated": null,
+      "instructions": "Batir con hielo y colar en vaso old fashioned con hielo.",
+      "imageUrl": null,
+      "source": "IBA Official Cocktails (iba-world.com)",
+      "origin": "CLASSIC",
+      "version": 1,
+      "categoryIds": [
+        "a8acc8fc-23ae-580b-8883-04adc54f276e",
+        "6ad42912-b971-54b1-afe8-d5e37b3fb433"
+      ],
+      "ingredients": [
+        {
+          "id": "3ba75a5d-f005-5beb-8808-0b875342fd38",
+          "ingredientId": "45d0b569-718c-5d2b-a09f-3a7c2c68d909",
+          "quantity": 45,
+          "unit": "ML",
+          "optional": false,
+          "position": 0
+        },
+        {
+          "id": "649bdd52-c266-598b-be9a-76c9ac47799c",
+          "ingredientId": "9f50c68f-a5ef-537a-a442-56f4cd7901a5",
+          "quantity": 25,
+          "unit": "ML",
+          "optional": false,
+          "position": 1
+        },
+        {
+          "id": "648bdf83-406e-517e-b918-e049c9bbc35c",
+          "ingredientId": "c16d7202-727f-5109-ba2b-0720a5d5597b",
+          "quantity": 20,
+          "unit": "ML",
+          "optional": false,
+          "position": 2
+        }
+      ],
+      "steps": [
+        {
+          "id": "3a005d38-6379-5300-9683-b49b4af412a6",
+          "stepNumber": 1,
+          "instruction": "Batir todos los ingredientes con hielo.",
+          "durationSeconds": null,
+          "imageUrl": null
+        },
+        {
+          "id": "5c0e3dac-b5ed-5ec0-b389-365aae69c189",
+          "stepNumber": 2,
+          "instruction": "Colar en un vaso old fashioned con hielo.",
+          "durationSeconds": null,
+          "imageUrl": null
+        },
+        {
+          "id": "5c5e045f-1160-58d8-a3ee-16c9cfe2020f",
+          "stepNumber": 3,
+          "instruction": "Decorar con media rodaja de naranja y una cereza.",
+          "durationSeconds": null,
+          "imageUrl": null
+        }
+      ]
+    },
+    {
+      "id": "ad55d369-ce4a-5834-aa2e-a32e6ac6494d",
+      "name": "Americano",
+      "slug": "americano",
+      "description": "Campari y vermut rojo, alargado con soda.",
+      "history": null,
+      "difficulty": "EASY",
+      "preparationTimeSeconds": null,
+      "servings": 1,
+      "glasswareId": "b8e34438-250d-524e-b460-49357074efe8",
+      "techniqueId": "518d751d-9c64-5cf0-a039-773974c8df9b",
+      "iceType": "CUBED",
+      "garnish": "Media rodaja de naranja y piel de limón",
+      "alcoholPercentageEstimated": null,
+      "instructions": "Construir sobre hielo y completar con un chorro de soda.",
+      "imageUrl": null,
+      "source": "IBA Official Cocktails (iba-world.com)",
+      "origin": "CLASSIC",
+      "version": 1,
+      "categoryIds": [
+        "a8acc8fc-23ae-580b-8883-04adc54f276e",
+        "63a58f0f-5316-50ec-969a-b0b5c7f951fe"
+      ],
+      "ingredients": [
+        {
+          "id": "77d33975-cc5d-52e4-9d05-fe108b25af1e",
+          "ingredientId": "3afcc639-d037-58e4-8782-154537d5993f",
+          "quantity": 30,
+          "unit": "ML",
+          "optional": false,
+          "position": 0
+        },
+        {
+          "id": "61f113fc-6d08-59c3-8b8c-f742181466da",
+          "ingredientId": "d3af1af7-fe9f-592d-b7b5-84810bbff3b8",
+          "quantity": 30,
+          "unit": "ML",
+          "optional": false,
+          "position": 1
+        },
+        {
+          "id": "9f3fd6e6-c581-5329-8a1b-7ac40b56d0c2",
+          "ingredientId": "7573d24c-a52f-5ad7-8866-85b90b618086",
+          "quantity": null,
+          "unit": "TOP_UP",
+          "optional": false,
+          "position": 2
+        }
+      ],
+      "steps": [
+        {
+          "id": "5f9ca63d-5c42-57e8-8c37-dfedcd70b628",
+          "stepNumber": 1,
+          "instruction": "Verter el Campari y el vermut en un vaso con hielo.",
+          "durationSeconds": null,
+          "imageUrl": null
+        },
+        {
+          "id": "421db5a8-96c0-5026-8dcd-67f43ef96c1b",
+          "stepNumber": 2,
+          "instruction": "Completar con un chorro de soda.",
+          "durationSeconds": null,
+          "imageUrl": null
+        },
+        {
+          "id": "900a3197-dfac-5cee-8968-ffb4fc2b689d",
+          "stepNumber": 3,
+          "instruction": "Decorar con media rodaja de naranja y piel de limón.",
+          "durationSeconds": null,
+          "imageUrl": null
+        }
+      ]
+    }
+  ],
+  "substitutions": [
+    {
+      "id": "f38e77d3-fe65-5609-94a2-a1e1c31fc9c1",
+      "ingredientId": "b854dfb6-a025-5eae-aa78-81f8c5eb807c",
+      "substituteId": "45d0b569-718c-5d2b-a09f-3a7c2c68d909",
+      "recipeId": "538927b6-6a44-50f8-a4ef-c3a92961de75",
+      "ratio": 1,
+      "notes": "Variante habitual; resulta un trago más dulce y redondo."
+    }
+  ]
+}

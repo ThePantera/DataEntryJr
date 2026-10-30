@@ -13,11 +13,11 @@
   },
   "scripts": {
     "build": "npm run build -w @bartender-lab/shared && npm run build -w @bartender-lab/api",
-    "typecheck": "npm run typecheck -w @bartender-lab/api",
+    "typecheck": "npm run typecheck -w @bartender-lab/api && npm run typecheck -w @bartender-lab/client-core",
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "test": "npm run test -w @bartender-lab/shared && npm run test -w @bartender-lab/api",
+    "test": "npm run test -w @bartender-lab/shared && npm run test -w @bartender-lab/client-core && npm run test -w @bartender-lab/api",
     "test:e2e": "npm run test:e2e -w @bartender-lab/api",
     "db:up": "docker compose up -d postgres"
   },

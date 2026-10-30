@@ -1,4 +1,5 @@
 import type { PrismaClient } from '@prisma/client';
+import { buildCatalog } from '../../prisma/catalog';
 import { seedDatabase } from '../../prisma/seed';
 import { getPublicationIssues } from '../../src/recipes/recipe-workflow';
 import { createTestApp, resetDatabase, type TestContext } from './helpers';
@@ -45,6 +46,24 @@ describe('Seed de desarrollo', () => {
     const before = await snapshot();
     await seedDatabase(prisma);
     expect(await snapshot()).toEqual(before);
+  });
+
+  it('uses the same ids as the catalog bundled in the mobile app', async () => {
+    const catalog = buildCatalog();
+    for (const recipe of catalog.recipes) {
+      const row = await prisma.recipe.findUniqueOrThrow({
+        where: { slug: recipe.slug },
+        include: { ingredients: true },
+      });
+      expect(row.id).toBe(recipe.id);
+      expect(row.ingredients.map((i) => i.id).sort()).toEqual(
+        recipe.ingredients.map((i) => i.id).sort(),
+      );
+    }
+    const ingredients = await prisma.ingredient.findMany({ select: { id: true } });
+    expect(ingredients.map((i) => i.id).sort()).toEqual(
+      catalog.ingredients.map((i) => i.id).sort(),
+    );
   });
 
   it('announces every published resource in the download manifest', async () => {

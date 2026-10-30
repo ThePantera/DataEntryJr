@@ -1079,6 +1079,30 @@
         ]
       }
     },
+    "/api/v1/substitutions": {
+      "get": {
+        "operationId": "SubstitutionsController_list",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SubstitutionDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "recipes"
+        ]
+      }
+    },
     "/api/v1/inventory": {
       "get": {
         "operationId": "InventoryController_list",
@@ -3404,6 +3428,44 @@
         },
         "required": [
           "status"
+        ]
+      },
+      "SubstitutionDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "ingredientId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "substituteId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "recipeId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true,
+            "description": "null = global."
+          },
+          "ratio": {
+            "type": "number"
+          },
+          "notes": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": [
+          "id",
+          "ingredientId",
+          "substituteId",
+          "recipeId",
+          "ratio",
+          "notes"
         ]
       },
       "InventoryItemDto": {

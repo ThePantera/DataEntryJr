@@ -178,6 +178,27 @@ describe('Recetas: consulta, escalado y coincidencia', () => {
     });
   });
 
+  describe('GET /substitutions', () => {
+    it('lists only approved substitutions, without authentication', async () => {
+      const res = await ctx.http().get(`${API}/substitutions`).expect(200);
+      expect(res.body).toHaveLength(2);
+      expect(res.body).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            ingredientId: catalog.ingredients.gommeSyrup.id,
+            substituteId: catalog.ingredients.simpleSyrup.id,
+            recipeId: null,
+            ratio: 1,
+          }),
+          expect.objectContaining({
+            ingredientId: catalog.ingredients.bourbon.id,
+            recipeId: catalog.recipes.whiskeySour.id,
+          }),
+        ]),
+      );
+    });
+  });
+
   describe('POST /recipes/match', () => {
     const match = (body: object) => ctx.http().post(`${API}/recipes/match`).send(body);
     const summary = (results: Array<{ recipeName: string; classification: string }>) =>

@@ -8,127 +8,73 @@ import { PrismaClient } from '@prisma/client';
 import { existsSync } from 'node:fs';
 import { PasswordHasher } from '../src/auth/password-hasher';
 import { rebuildManifest } from '../src/manifest/manifest-store';
-import * as data from './seed-data';
+import { buildCatalog } from './catalog';
 
-function byName<T extends { id: string; name: string }>(rows: T[]): Map<string, T> {
-  return new Map(rows.map((row) => [row.name, row]));
-}
-
-function required<T>(map: Map<string, T>, name: string, what: string): T {
-  const value = map.get(name);
-  if (!value) throw new Error(`Seed data error: unknown ${what} "${name}"`);
-  return value;
-}
-
+/**
+ * Inserts the catalog built by buildCatalog() with its deterministic ids, so the server and the
+ * catalog bundled in the mobile app share identifiers. Existing rows are left untouched.
+ */
 export async function seedDatabase(prisma: PrismaClient): Promise<void> {
-  for (const category of data.categories) {
+  const catalog = buildCatalog();
+
+  for (const { id, ...category } of catalog.categories) {
     await prisma.category.upsert({
       where: { kind_name: { kind: category.kind, name: category.name } },
-      create: category,
+      create: { id, ...category },
       update: {},
     });
   }
-  const ingredientCategories = byName(
-    await prisma.category.findMany({ where: { kind: 'INGREDIENT' } }),
-  );
-  const recipeCategories = byName(await prisma.category.findMany({ where: { kind: 'RECIPE' } }));
-
-  for (const { category, ...ingredient } of data.ingredients) {
+  for (const { id, ...ingredient } of catalog.ingredients) {
     await prisma.ingredient.upsert({
       where: { name: ingredient.name },
-      create: {
-        ...ingredient,
-        categoryId: required(ingredientCategories, category, 'category').id,
-      },
+      create: { id, ...ingredient },
       update: {},
     });
   }
-  for (const glass of data.glassware) {
-    await prisma.glassware.upsert({ where: { name: glass.name }, create: glass, update: {} });
+  for (const { id, ...glass } of catalog.glassware) {
+    await prisma.glassware.upsert({
+      where: { name: glass.name },
+      create: { id, ...glass },
+      update: {},
+    });
   }
-  for (const item of data.equipment) {
-    await prisma.equipment.upsert({ where: { name: item.name }, create: item, update: {} });
+  for (const { id, ...item } of catalog.equipment) {
+    await prisma.equipment.upsert({
+      where: { name: item.name },
+      create: { id, ...item },
+      update: {},
+    });
   }
-  const equipment = byName(await prisma.equipment.findMany());
-  for (const { equipment: tools, ...technique } of data.techniques) {
+  for (const { id, equipmentIds, ...technique } of catalog.techniques) {
     await prisma.technique.upsert({
       where: { name: technique.name },
       create: {
+        id,
         ...technique,
-        equipment: {
-          create: tools.map((name) => ({ equipmentId: required(equipment, name, 'equipment').id })),
-        },
+        equipment: { create: equipmentIds.map((equipmentId) => ({ equipmentId })) },
       },
       update: {},
     });
   }
 
-  const ingredients = byName(await prisma.ingredient.findMany());
-  const glassware = byName(await prisma.glassware.findMany());
-  const techniques = byName(await prisma.technique.findMany());
-
-  for (const recipe of data.recipes) {
+  for (const { categoryIds, ingredients, steps, ...recipe } of catalog.recipes) {
     if (await prisma.recipe.findUnique({ where: { slug: recipe.slug }, select: { id: true } }))
       continue;
     await prisma.recipe.create({
       data: {
-        name: recipe.name,
-        slug: recipe.slug,
-        description: recipe.description,
-        difficulty: recipe.difficulty,
-        techniqueId: required(techniques, recipe.technique, 'technique').id,
-        glasswareId: required(glassware, recipe.glassware, 'glassware').id,
-        iceType: recipe.iceType,
-        garnish: recipe.garnish,
-        instructions: recipe.instructions,
-        source: data.SEED_SOURCE,
-        origin: 'CLASSIC',
+        ...recipe,
         verificationStatus: 'PUBLISHED',
         publishedAt: new Date(),
-        ingredients: {
-          create: recipe.ingredients.map((line, position) => ({
-            ingredientId: required(ingredients, line.name, 'ingredient').id,
-            quantity: line.quantity,
-            unit: line.unit,
-            optional: line.optional ?? false,
-            position,
-          })),
-        },
-        steps: {
-          create: recipe.steps.map((instruction, index) => ({
-            stepNumber: index + 1,
-            instruction,
-          })),
-        },
-        categories: {
-          create: recipe.categories.map((name) => ({
-            categoryId: required(recipeCategories, name, 'recipe category').id,
-          })),
-        },
+        ingredients: { create: ingredients },
+        steps: { create: steps },
+        categories: { create: categoryIds.map((categoryId) => ({ categoryId })) },
       },
     });
   }
 
-  for (const sub of data.substitutions) {
-    const ingredientId = required(ingredients, sub.ingredient, 'ingredient').id;
-    const substituteId = required(ingredients, sub.substitute, 'ingredient').id;
-    const recipeId = sub.recipeSlug
-      ? (await prisma.recipe.findUniqueOrThrow({ where: { slug: sub.recipeSlug } })).id
-      : null;
-    const exists = await prisma.ingredientSubstitution.findFirst({
-      where: { ingredientId, substituteId, recipeId },
-    });
-    if (!exists) {
-      await prisma.ingredientSubstitution.create({
-        data: {
-          ingredientId,
-          substituteId,
-          recipeId,
-          ratio: sub.ratio,
-          notes: sub.notes,
-          approved: true,
-        },
-      });
+  for (const substitution of catalog.substitutions) {
+    if (!(await prisma.ingredientSubstitution.findUnique({ where: { id: substitution.id } }))) {
+      await prisma.ingredientSubstitution.create({ data: { ...substitution, approved: true } });
     }
   }
 
