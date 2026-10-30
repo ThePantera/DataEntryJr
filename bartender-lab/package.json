@@ -1,0 +1,31 @@
+{
+  "name": "bartender-lab",
+  "version": "0.1.0",
+  "private": true,
+  "description": "BARTENDER LAB — aplicación gratuita de coctelería (monorepo: API NestJS, paquete de dominio compartido y, desde la Fase 4, app Expo).",
+  "license": "UNLICENSED",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "npm run build -w @bartender-lab/shared && npm run build -w @bartender-lab/api",
+    "typecheck": "npm run typecheck -w @bartender-lab/api",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "npm run test -w @bartender-lab/shared && npm run test -w @bartender-lab/api",
+    "test:e2e": "npm run test:e2e -w @bartender-lab/api",
+    "db:up": "docker compose up -d postgres"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.13.0",
+    "prettier": "^3.9.10",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.72.1"
+  }
+}

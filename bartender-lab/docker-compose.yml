@@ -1,0 +1,22 @@
+# Base de datos local para desarrollo y pruebas e2e.
+# Crea dos bases: bartender_lab (desarrollo) y bartender_lab_test (pruebas e2e).
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: bartender
+      POSTGRES_PASSWORD: bartender
+      POSTGRES_DB: bartender_lab
+    ports:
+      - '5432:5432'
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./docker/postgres-init.sql:/docker-entrypoint-initdb.d/01-test-db.sql:ro
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U bartender -d bartender_lab']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  pgdata:

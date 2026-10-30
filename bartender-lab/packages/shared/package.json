@@ -1,0 +1,22 @@
+{
+  "name": "@bartender-lab/shared",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Lógica de dominio determinista compartida por la API y la app móvil (motor de coincidencia, escalado de cantidades, enumeraciones).",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "jest"
+  },
+  "devDependencies": {
+    "@types/jest": "^30.0.0",
+    "@types/node": "^22.20.5",
+    "jest": "^30.5.2",
+    "ts-jest": "^29.4.15"
+  }
+}

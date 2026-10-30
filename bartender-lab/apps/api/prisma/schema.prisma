@@ -1,0 +1,479 @@
+// BARTENDER LAB — modelo de datos (Fase 2).
+// Las tablas y columnas usan snake_case (nombres del documento técnico); los modelos usan camelCase.
+// Restricciones CHECK adicionales viven en las migraciones SQL (Prisma no las modela).
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  USER
+  EDITOR
+  ADMIN
+}
+
+enum CategoryKind {
+  INGREDIENT
+  RECIPE
+}
+
+enum Difficulty {
+  EASY
+  MEDIUM
+  HARD
+}
+
+enum VerificationStatus {
+  DRAFT
+  REVIEW
+  VERIFIED
+  PUBLISHED
+}
+
+enum RecipeOrigin {
+  CLASSIC
+  ORIGINAL
+}
+
+enum IceType {
+  NONE
+  CUBED
+  CRUSHED
+  LARGE_CUBE
+  SPHERE
+  BLOCK
+  SHAVED
+}
+
+enum Unit {
+  ML
+  CL
+  OZ
+  DASH
+  DROP
+  BARSPOON
+  TEASPOON
+  TABLESPOON
+  GRAM
+  UNIT
+  SLICE
+  WEDGE
+  SPRIG
+  LEAF
+  PINCH
+  TOP_UP
+}
+
+enum Allergen {
+  CELERY
+  GLUTEN
+  CRUSTACEANS
+  EGGS
+  FISH
+  LUPIN
+  MILK
+  MOLLUSCS
+  MUSTARD
+  TREE_NUTS
+  PEANUTS
+  SESAME
+  SOY
+  SULPHITES
+}
+
+enum ResourceType {
+  RECIPE
+  INGREDIENT
+  TECHNIQUE
+  GLASSWARE
+  EQUIPMENT
+  CATEGORY
+}
+
+enum SyncEntityType {
+  FAVORITE
+  INVENTORY
+  SHOPPING_LIST
+  SHOPPING_LIST_ITEM
+}
+
+enum SyncAction {
+  UPSERT
+  DELETE
+}
+
+enum SyncStatus {
+  APPLIED
+  MERGED
+  CONFLICT
+  REJECTED
+}
+
+// ─── Usuarios y autenticación ────────────────────────────────────────────────
+
+model User {
+  id           String   @id @default(uuid()) @db.Uuid
+  /// Siempre en minúsculas (normalizado por la aplicación).
+  email        String   @unique
+  passwordHash String   @map("password_hash")
+  displayName  String   @map("display_name")
+  role         UserRole @default(USER)
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt    DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  refreshTokens  RefreshToken[]
+  inventory      InventoryItem[]
+  favorites      Favorite[]
+  shoppingLists  ShoppingList[]
+  syncOperations SyncOperation[]
+  recipes        Recipe[]
+
+  @@map("users")
+}
+
+/// Refresh tokens opacos. Solo se guarda su hash SHA-256; se rotan en cada uso y
+/// la reutilización de un token revocado invalida toda su familia.
+model RefreshToken {
+  id        String    @id @default(uuid()) @db.Uuid
+  userId    String    @map("user_id") @db.Uuid
+  familyId  String    @map("family_id") @db.Uuid
+  tokenHash String    @unique @map("token_hash")
+  expiresAt DateTime  @map("expires_at") @db.Timestamptz(3)
+  revokedAt DateTime? @map("revoked_at") @db.Timestamptz(3)
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([familyId])
+  @@map("refresh_tokens")
+}
+
+// ─── Catálogo ────────────────────────────────────────────────────────────────
+
+model Category {
+  id          String       @id @default(uuid()) @db.Uuid
+  name        String
+  description String?
+  kind        CategoryKind
+  version     Int          @default(1)
+  createdAt   DateTime     @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt   DateTime     @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  ingredients Ingredient[]
+  recipes     RecipeCategory[]
+
+  @@unique([kind, name])
+  @@map("categories")
+}
+
+model Ingredient {
+  id                String     @id @default(uuid()) @db.Uuid
+  name              String     @unique
+  description       String?
+  categoryId        String     @map("category_id") @db.Uuid
+  alcoholPercentage Decimal    @default(0) @map("alcohol_percentage") @db.Decimal(5, 2)
+  imageUrl          String?    @map("image_url")
+  allergens         Allergen[] @default([])
+  version           Int        @default(1)
+  createdAt         DateTime   @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt         DateTime   @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  category          Category                 @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  recipeIngredients RecipeIngredient[]
+  inventoryItems    InventoryItem[]
+  shoppingListItems ShoppingListItem[]
+  substitutionsFor  IngredientSubstitution[] @relation("SubstitutionOriginal")
+  substitutesIn     IngredientSubstitution[] @relation("SubstitutionSubstitute")
+
+  @@index([categoryId])
+  @@map("ingredients")
+}
+
+/// Sustituciones documentadas para el motor de coincidencia. Solo las aprobadas cuentan.
+/// recipe_id NULL = sustitución global; con valor = solo válida para esa receta.
+model IngredientSubstitution {
+  id           String   @id @default(uuid()) @db.Uuid
+  ingredientId String   @map("ingredient_id") @db.Uuid
+  substituteId String   @map("substitute_id") @db.Uuid
+  recipeId     String?  @map("recipe_id") @db.Uuid
+  /// Cantidad del sustituto = cantidad original × ratio.
+  ratio        Decimal  @default(1) @db.Decimal(6, 3)
+  notes        String?
+  approved     Boolean  @default(false)
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt    DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  ingredient Ingredient @relation("SubstitutionOriginal", fields: [ingredientId], references: [id], onDelete: Cascade)
+  substitute Ingredient @relation("SubstitutionSubstitute", fields: [substituteId], references: [id], onDelete: Cascade)
+  recipe     Recipe?    @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+
+  @@unique([ingredientId, substituteId, recipeId])
+  @@index([substituteId])
+  @@map("ingredient_substitutions")
+}
+
+model Glassware {
+  id          String   @id @default(uuid()) @db.Uuid
+  name        String   @unique
+  description String?
+  capacityMl  Int?     @map("capacity_ml")
+  imageUrl    String?  @map("image_url")
+  version     Int      @default(1)
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  recipes Recipe[]
+
+  @@map("glassware")
+}
+
+model Equipment {
+  id          String   @id @default(uuid()) @db.Uuid
+  name        String   @unique
+  description String?
+  imageUrl    String?  @map("image_url")
+  version     Int      @default(1)
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  techniques TechniqueEquipment[]
+
+  @@map("equipment")
+}
+
+model Technique {
+  id              String   @id @default(uuid()) @db.Uuid
+  name            String   @unique
+  description     String
+  /// Duración típica de la técnica en segundos.
+  durationSeconds Int?     @map("duration_seconds")
+  instructions    String
+  commonMistakes  String[] @default([]) @map("common_mistakes")
+  version         Int      @default(1)
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt       DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  equipment TechniqueEquipment[]
+  recipes   Recipe[]
+
+  @@map("techniques")
+}
+
+/// Relación normalizada técnica ↔ equipamiento (campo "equipment" del documento).
+model TechniqueEquipment {
+  techniqueId String @map("technique_id") @db.Uuid
+  equipmentId String @map("equipment_id") @db.Uuid
+
+  technique Technique @relation(fields: [techniqueId], references: [id], onDelete: Cascade)
+  equipment Equipment @relation(fields: [equipmentId], references: [id], onDelete: Restrict)
+
+  @@id([techniqueId, equipmentId])
+  @@map("technique_equipment")
+}
+
+// ─── Recetas ─────────────────────────────────────────────────────────────────
+
+model Recipe {
+  id                         String             @id @default(uuid()) @db.Uuid
+  name                       String
+  slug                       String             @unique
+  description                String
+  history                    String?
+  difficulty                 Difficulty
+  preparationTimeSeconds     Int?               @map("preparation_time_seconds")
+  /// Porciones para las que están expresadas las cantidades.
+  servings                   Int                @default(1)
+  glasswareId                String?            @map("glassware_id") @db.Uuid
+  techniqueId                String?            @map("technique_id") @db.Uuid
+  iceType                    IceType?           @map("ice_type")
+  garnish                    String?
+  alcoholPercentageEstimated Decimal?           @map("alcohol_percentage_estimated") @db.Decimal(5, 2)
+  /// Resumen del método; el paso a paso vive en recipe_steps.
+  instructions               String?
+  imageUrl                   String?            @map("image_url")
+  source                     String?
+  origin                     RecipeOrigin       @default(CLASSIC)
+  verificationStatus         VerificationStatus @default(DRAFT) @map("verification_status")
+  version                    Int                @default(1)
+  createdById                String?            @map("created_by_id") @db.Uuid
+  publishedAt                DateTime?          @map("published_at") @db.Timestamptz(3)
+  createdAt                  DateTime           @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt                  DateTime           @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  glassware     Glassware?               @relation(fields: [glasswareId], references: [id], onDelete: Restrict)
+  technique     Technique?               @relation(fields: [techniqueId], references: [id], onDelete: Restrict)
+  createdBy     User?                    @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  ingredients   RecipeIngredient[]
+  steps         RecipeStep[]
+  categories    RecipeCategory[]
+  favorites     Favorite[]
+  substitutions IngredientSubstitution[]
+
+  @@index([verificationStatus])
+  @@index([name])
+  @@map("recipes")
+}
+
+model RecipeIngredient {
+  id           String   @id @default(uuid()) @db.Uuid
+  recipeId     String   @map("recipe_id") @db.Uuid
+  ingredientId String   @map("ingredient_id") @db.Uuid
+  /// NULL solo para unidades sin cantidad (TOP_UP).
+  quantity     Decimal? @db.Decimal(8, 2)
+  unit         Unit
+  optional     Boolean  @default(false)
+  position     Int
+
+  recipe     Recipe     @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  ingredient Ingredient @relation(fields: [ingredientId], references: [id], onDelete: Restrict)
+
+  @@unique([recipeId, ingredientId])
+  @@index([ingredientId])
+  @@map("recipe_ingredients")
+}
+
+model RecipeStep {
+  id              String  @id @default(uuid()) @db.Uuid
+  recipeId        String  @map("recipe_id") @db.Uuid
+  stepNumber      Int     @map("step_number")
+  instruction     String
+  durationSeconds Int?    @map("duration_seconds")
+  imageUrl        String? @map("image_url")
+
+  recipe Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+
+  @@unique([recipeId, stepNumber])
+  @@map("recipe_steps")
+}
+
+model RecipeCategory {
+  recipeId   String @map("recipe_id") @db.Uuid
+  categoryId String @map("category_id") @db.Uuid
+
+  recipe   Recipe   @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  category Category @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+
+  @@id([recipeId, categoryId])
+  @@index([categoryId])
+  @@map("recipe_categories")
+}
+
+// ─── Datos del usuario (sincronizables) ──────────────────────────────────────
+// Todas usan UUID (puede generarlo el cliente), versión, updated_at y borrado lógico
+// (deleted_at) para que la sincronización propague eliminaciones sin duplicar.
+
+model InventoryItem {
+  id             String    @id @default(uuid()) @db.Uuid
+  userId         String    @map("user_id") @db.Uuid
+  ingredientId   String    @map("ingredient_id") @db.Uuid
+  quantity       Decimal?  @db.Decimal(10, 2)
+  unit           Unit?
+  expirationDate DateTime? @map("expiration_date") @db.Date
+  version        Int       @default(1)
+  createdAt      DateTime  @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt      DateTime  @updatedAt @map("updated_at") @db.Timestamptz(3)
+  deletedAt      DateTime? @map("deleted_at") @db.Timestamptz(3)
+
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  ingredient Ingredient @relation(fields: [ingredientId], references: [id], onDelete: Restrict)
+
+  @@unique([userId, ingredientId])
+  @@index([userId, updatedAt])
+  @@map("inventory")
+}
+
+model Favorite {
+  id        String    @id @default(uuid()) @db.Uuid
+  userId    String    @map("user_id") @db.Uuid
+  recipeId  String    @map("recipe_id") @db.Uuid
+  version   Int       @default(1)
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt DateTime  @updatedAt @map("updated_at") @db.Timestamptz(3)
+  deletedAt DateTime? @map("deleted_at") @db.Timestamptz(3)
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  recipe Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, recipeId])
+  @@index([userId, updatedAt])
+  @@map("favorites")
+}
+
+model ShoppingList {
+  id        String    @id @default(uuid()) @db.Uuid
+  userId    String    @map("user_id") @db.Uuid
+  name      String
+  version   Int       @default(1)
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt DateTime  @updatedAt @map("updated_at") @db.Timestamptz(3)
+  deletedAt DateTime? @map("deleted_at") @db.Timestamptz(3)
+
+  user  User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items ShoppingListItem[]
+
+  @@index([userId, updatedAt])
+  @@map("shopping_lists")
+}
+
+model ShoppingListItem {
+  id             String    @id @default(uuid()) @db.Uuid
+  shoppingListId String    @map("shopping_list_id") @db.Uuid
+  ingredientId   String    @map("ingredient_id") @db.Uuid
+  quantity       Decimal?  @db.Decimal(10, 2)
+  unit           Unit?
+  completed      Boolean   @default(false)
+  version        Int       @default(1)
+  createdAt      DateTime  @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt      DateTime  @updatedAt @map("updated_at") @db.Timestamptz(3)
+  deletedAt      DateTime? @map("deleted_at") @db.Timestamptz(3)
+
+  shoppingList ShoppingList @relation(fields: [shoppingListId], references: [id], onDelete: Cascade)
+  ingredient   Ingredient   @relation(fields: [ingredientId], references: [id], onDelete: Restrict)
+
+  @@unique([shoppingListId, ingredientId])
+  @@index([shoppingListId, updatedAt])
+  @@map("shopping_list_items")
+}
+
+// ─── Sincronización ──────────────────────────────────────────────────────────
+
+/// Versión publicada de cada recurso público descargable. Los clientes la comparan con su
+/// copia local para saber qué está desactualizado. deleted = el recurso dejó de publicarse.
+model DownloadManifest {
+  id           String       @id @default(uuid()) @db.Uuid
+  resourceType ResourceType @map("resource_type")
+  resourceId   String       @map("resource_id") @db.Uuid
+  version      Int
+  deleted      Boolean      @default(false)
+  updatedAt    DateTime     @map("updated_at") @db.Timestamptz(3)
+
+  @@unique([resourceType, resourceId])
+  @@index([updatedAt])
+  @@map("download_manifest")
+}
+
+/// Registro de idempotencia de POST /sync/push: cada operación de la cola del cliente
+/// tiene un op_id; si se reenvía, se devuelve el resultado guardado sin volver a aplicarla.
+model SyncOperation {
+  id         String         @id @default(uuid()) @db.Uuid
+  userId     String         @map("user_id") @db.Uuid
+  opId       String         @map("op_id") @db.Uuid
+  entityType SyncEntityType @map("entity_type")
+  entityId   String         @map("entity_id") @db.Uuid
+  action     SyncAction
+  status     SyncStatus
+  result     Json
+  createdAt  DateTime       @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, opId])
+  @@index([createdAt])
+  @@map("sync_operations")
+}
