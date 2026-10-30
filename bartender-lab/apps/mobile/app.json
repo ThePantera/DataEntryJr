@@ -53,6 +53,10 @@
     ],
     "experiments": {
       "typedRoutes": false
+    },
+    "web": {
+      "output": "single",
+      "bundler": "metro"
     }
   }
 }

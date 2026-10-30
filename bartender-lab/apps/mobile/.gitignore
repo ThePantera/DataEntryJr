@@ -6,3 +6,4 @@ ios/
 *.keystore
 !debug.keystore
 dist/
+dist-web/

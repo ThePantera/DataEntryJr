@@ -10,7 +10,8 @@
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "prebuild:android": "expo prebuild --platform android --clean",
     "apk": "bash scripts/build-apk.sh",
-    "ios": "expo run:ios"
+    "ios": "expo run:ios",
+    "smoke:web": "node scripts/web-smoke.mjs"
   },
   "devDependencies": {
     "@types/react": "~19.1.17"
