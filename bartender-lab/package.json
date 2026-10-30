@@ -13,7 +13,7 @@
   },
   "scripts": {
     "build": "npm run build -w @bartender-lab/shared && npm run build -w @bartender-lab/api",
-    "typecheck": "npm run typecheck -w @bartender-lab/api && npm run typecheck -w @bartender-lab/client-core",
+    "typecheck": "npm run typecheck -w @bartender-lab/api && npm run typecheck -w @bartender-lab/client-core && npm run typecheck -w @bartender-lab/mobile",
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
@@ -27,5 +27,9 @@
     "prettier": "^3.9.10",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.72.1"
+  },
+  "overrides": {
+    "react": "19.1.0",
+    "react-dom": "19.1.0"
   }
 }

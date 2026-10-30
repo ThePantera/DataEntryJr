@@ -14,7 +14,11 @@
     "smoke:web": "node scripts/web-smoke.mjs"
   },
   "devDependencies": {
-    "@types/react": "~19.1.17"
+    "@expo/metro-runtime": "~6.1.2",
+    "@types/react": "~19.1.17",
+    "playwright": "1.63.0",
+    "react-dom": "19.1.0",
+    "react-native-web": "~0.21.0"
   },
   "dependencies": {
     "@bartender-lab/client-core": "0.1.0",

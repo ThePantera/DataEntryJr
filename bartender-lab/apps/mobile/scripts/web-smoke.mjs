@@ -50,8 +50,12 @@ const shake = catalog.techniques.find((t) => t.name === 'Batido');
 const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: 412, height: 900 } });
 const errors = [];
-page.on('pageerror', (error) => errors.push(error.message));
-page.on('console', (msg) => msg.type() === 'error' && errors.push(msg.text()));
+// Headless Chromium denies the Wake Lock API used by expo-keep-awake on web; on Android the
+// screen is kept on natively (FLAG_KEEP_SCREEN_ON), so this message is not an app error.
+const BROWSER_ONLY = [/Wake Lock permission request denied/];
+const record = (message) => BROWSER_ONLY.some((re) => re.test(message)) || errors.push(message);
+page.on('pageerror', (error) => record(error.message));
+page.on('console', (msg) => msg.type() === 'error' && record(msg.text()));
 
 let step = 0;
 async function visit(path, expectText) {
@@ -84,7 +88,7 @@ try {
 
   // Main offline flow: stock the bar, then ask what can be prepared.
   for (const name of ['Gin', 'Campari', 'Vermut rojo']) {
-    await visit('/ingredientes?modo=barra', 'Buscar ingrediente');
+    await visit('/ingredientes?modo=barra', 'Amargo de Angostura');
     await page.getByText(name, { exact: true }).first().click();
     await page.waitForTimeout(500);
   }

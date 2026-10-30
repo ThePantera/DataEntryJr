@@ -8,3 +8,4 @@ apps/mobile/android
 apps/mobile/ios
 apps/mobile/.expo
 packages/client-core/data/catalog.json
+apps/mobile/dist-web

@@ -13,5 +13,5 @@
 
 ## Pruebas
 
-El escalado que alimenta el checklist está probado en `shared` y `client-core`. La pantalla se
-valida con typecheck y el build del APK; no hay pruebas automatizadas de interfaz (Fase 11).
+El escalado que alimenta el checklist está probado en `shared` y `client-core`. La prueba de humo
+web abre el modo preparación del Negroni y verifica que se muestra el checklist.

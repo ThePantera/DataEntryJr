@@ -10,7 +10,8 @@
 Notas:
 
 - Google Play Protect puede advertir que la app no viene de la tienda; es normal en APKs
-  instalados a mano. La app no pide permisos especiales.
+  instalados a mano. La app solo usa Internet (opcional, para sincronizar), el estado de la red y
+  la vibración del temporizador; no pide permisos peligrosos.
 - Sincronizar entre dispositivos o descargar recetas nuevas es opcional: requiere poner en marcha
   la API (ver el [README](../../README.md)) e indicar su dirección en **Más → Configuración**.
 - Si una versión futura no se instala encima de la actual, desinstala la anterior antes

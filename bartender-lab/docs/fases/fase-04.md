@@ -32,9 +32,17 @@ Instalación en el teléfono: ver [instalar el APK](../movil/instalar-apk.md).
 
 ## Pruebas
 
-La lógica de la app está en `packages/client-core` (ver [Fase 8](fase-08.md)). La interfaz se
-verifica con typecheck estricto, el empaquetado de Metro (`expo export`), `expo install --check` y
-el build del APK. No hay pruebas automatizadas de interfaz (pendiente en la Fase 11).
+- **Prueba de humo de la interfaz** (`npm run smoke:web -w @bartender-lab/mobile`): exporta la app
+  real para web (react-native-web y SQLite en WebAssembly), recorre con Playwright las 11 pantallas
+  y el selector de ingredientes, y ejecuta el flujo principal offline: añadir Gin, Campari y Vermut
+  a Mi barra → "¿Qué puedo preparar?" muestra el Negroni como "Tienes todo". Falla ante cualquier
+  error de página. Corre también en la CI.
+  - Detectó un error real antes de entregar el APK: npm había instalado dos versiones de React
+    (19.1.0 y 19.3.1), lo que rompe los hooks al iniciar. Se corrigió fijando `overrides` en el
+    `package.json` raíz.
+- La lógica de la app está en `packages/client-core` (ver [Fase 8](fase-08.md)).
+- Además: typecheck estricto, empaquetado de Metro para Android, `expo install --check` y build del
+  APK. No hay emulador Android en la CI, por lo que la prueba de interfaz se hace en navegador.
 
 ## Decisiones
 

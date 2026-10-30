@@ -37,5 +37,5 @@ conexión, la ausencia de duplicados y la resolución de conflictos.
 
 - Las pantallas de React Native son delgadas: leen de los repositorios mediante React Query e
   invalidan las consultas tras cada escritura.
-- La interfaz no tiene pruebas automatizadas propias. Su lógica está cubierta en `client-core`, y
-  la app se valida con typecheck, el empaquetado de Metro y el build del APK (ver Fase 11).
+- La interfaz tiene una prueba de humo en navegador (`apps/mobile/scripts/web-smoke.mjs`); su lógica
+  está cubierta en `client-core`.

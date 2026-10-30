@@ -12,6 +12,7 @@ export default tseslint.config(
       'apps/mobile/android/**',
       'apps/mobile/ios/**',
       'apps/mobile/.expo/**',
+      'apps/mobile/dist-web/**',
     ],
   },
   eslint.configs.recommended,

@@ -2,8 +2,11 @@
 
 ## Hecho
 
-- CI en GitHub Actions: lint, formato, typecheck, build, unitarias y e2e contra PostgreSQL 16
-  (`bartender-lab.yml`), y build del APK publicado como artefacto (`bartender-lab-apk.yml`).
+- CI en GitHub Actions: lint, formato, typecheck, build, unitarias, e2e contra PostgreSQL 16 y
+  prueba de humo de la interfaz en navegador (`bartender-lab.yml`), y build del APK publicado como
+  artefacto (`bartender-lab-apk.yml`).
+- Mínimo privilegio en Android: se bloquean los permisos que la app no usa (almacenamiento externo,
+  superposición de ventanas, biometría). Quedan Internet, estado de red y vibración (temporizador).
 - Seguridad revisada en las Fases 3 y 8: scrypt, refresh tokens rotados con detección de
   reutilización, rol releído en cada petición, validación estricta, rate limiting, Helmet, errores
   sin datos sensibles en respuestas ni logs, tokens del móvil en el almacén seguro del sistema y
