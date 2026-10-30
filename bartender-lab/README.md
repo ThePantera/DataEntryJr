@@ -1,6 +1,8 @@
 # BARTENDER LAB
 
 Aplicación gratuita de coctelería para bartenders profesionales, estudiantes y aficionados.
+
+**📱 [Descargar la app para Android (APK)](apk/README.md)**
 Este directorio contiene el monorepo del producto (API, dominio compartido y, desde la Fase 4,
 la app móvil).
 
