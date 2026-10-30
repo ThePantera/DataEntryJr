@@ -1,0 +1,55 @@
+name: bartender-lab
+
+on:
+  push:
+    paths:
+      - 'bartender-lab/**'
+      - '.github/workflows/bartender-lab.yml'
+  pull_request:
+    paths:
+      - 'bartender-lab/**'
+      - '.github/workflows/bartender-lab.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: bartender-lab
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: bartender
+          POSTGRES_PASSWORD: bartender
+          POSTGRES_DB: bartender_lab_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U bartender -d bartender_lab_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      # Test-only values for the throwaway CI database; not real secrets.
+      DATABASE_URL: postgresql://bartender:bartender@localhost:5432/bartender_lab_test?schema=public
+      JWT_ACCESS_SECRET: ci-only-secret-that-is-long-enough-for-hs256
+      PASSWORD_HASH_COST: '12'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: bartender-lab/.nvmrc
+          cache: npm
+          cache-dependency-path: bartender-lab/package-lock.json
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run format:check
+      - run: npm run typecheck
+      - run: npm run build
+      - run: npm test
+      - run: npm run test:e2e
