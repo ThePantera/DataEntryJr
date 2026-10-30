@@ -90,6 +90,10 @@ npm test                # unitarias (shared, client-core y API), sin base de dat
 npm run test:e2e        # e2e contra PostgreSQL real (base bartender_lab_test)
 ```
 
+Totales actuales: 106 unitarias (26 `shared`, 26 `client-core`, 54 API), 148 e2e (API y núcleo
+móvil contra la API real) y la prueba de humo de la interfaz (`npm run smoke:web -w
+@bartender-lab/mobile`).
+
 Las pruebas e2e usan `DATABASE_URL` de `apps/api/.env.test` (ver `.env.test.example`) o, por
 defecto, `bartender_lab_test` en `localhost`. **Vacían la base**, así que se niegan a ejecutarse
 si su nombre no termina en `_test`.

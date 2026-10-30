@@ -48,8 +48,8 @@ curl -s -X POST localhost:3000/api/v1/recipes/match -H 'Content-Type: applicatio
 ## Pruebas
 
 ```bash
-npm test            # 75 unitarias (26 shared + 49 API)
-npm run test:e2e    # 136 e2e contra PostgreSQL
+npm test            # al cierre de la Fase 3: 75 unitarias (26 shared + 49 API)
+npm run test:e2e    # al cierre de la Fase 3: 136 e2e contra PostgreSQL
 ```
 
 Correspondencia con las pruebas obligatorias del documento (sección 12):
