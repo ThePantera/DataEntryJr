@@ -6,34 +6,38 @@ la app móvil).
 
 ## Estado
 
-| Fase | Contenido                                   | Estado                                                             |
-| ---- | ------------------------------------------- | ------------------------------------------------------------------ |
-| 1    | Repositorio y arquitectura                  | ✅ Entregada ([detalle](docs/fases/fase-01.md))                    |
-| 2    | Base de datos y migraciones                 | ✅ Entregada ([detalle](docs/fases/fase-02.md))                    |
-| 3    | API REST y documentación Swagger            | ✅ Entregada ([detalle](docs/fases/fase-03.md))                    |
-| 4    | Aplicación móvil (Expo)                     | ⏳ Pendiente                                                       |
-| 5    | Catálogo inicial de ingredientes            | ⏳ Pendiente (hay un seed de desarrollo, no el catálogo editorial) |
-| 6    | Recetario y técnicas                        | ⏳ Pendiente (la API ya los soporta; falta contenido y app)        |
-| 7    | Inventario y buscador inteligente en la app | ⏳ Pendiente (endpoints listos)                                    |
-| 8    | SQLite y sincronización offline en la app   | ⏳ Pendiente (protocolo y servidor listos)                         |
-| 9    | Modo preparación                            | ⏳ Pendiente                                                       |
-| 10   | Inteligencia artificial (LLM)               | ⏳ Pendiente (hoy el asistente usa reglas, sin LLM)                |
-| 11   | Testing, seguridad y optimización           | ⏳ Pendiente                                                       |
+| Fase | Contenido                         | Estado                                                                                        |
+| ---- | --------------------------------- | --------------------------------------------------------------------------------------------- |
+| 1    | Repositorio y arquitectura        | ✅ ([detalle](docs/fases/fase-01.md))                                                         |
+| 2    | Base de datos y migraciones       | ✅ ([detalle](docs/fases/fase-02.md))                                                         |
+| 3    | API REST y documentación Swagger  | ✅ ([detalle](docs/fases/fase-03.md))                                                         |
+| 4    | Aplicación móvil (Expo) y APK     | ✅ ([detalle](docs/fases/fase-04.md))                                                         |
+| 5    | Catálogo inicial de ingredientes  | ✅ inicial, ampliable ([detalle](docs/fases/fase-05.md))                                      |
+| 6    | Recetario y técnicas              | ✅ 7 clásicos IBA y 4 técnicas ([detalle](docs/fases/fase-06.md))                             |
+| 7    | Inventario y buscador inteligente | ✅ ([detalle](docs/fases/fase-07.md))                                                         |
+| 8    | SQLite y sincronización offline   | ✅ ([detalle](docs/fases/fase-08.md))                                                         |
+| 9    | Modo preparación                  | ✅ ([detalle](docs/fases/fase-09.md))                                                         |
+| 10   | Inteligencia artificial (LLM)     | ⛔ No integrada: el asistente usa reglas, gratis y offline ([detalle](docs/fases/fase-10.md)) |
+| 11   | Testing, seguridad y optimización | 🟡 Parcial ([detalle](docs/fases/fase-11.md))                                                 |
 
-Nada de lo marcado como pendiente está simulado: esos endpoints o pantallas simplemente no existen todavía.
+**La app es gratuita y funciona sin servidor:** el APK trae el recetario incorporado. El servidor
+(esta API) es opcional y solo hace falta para sincronizar entre dispositivos o descargar recetas
+nuevas. Nada pendiente está simulado.
 
 ## Estructura
 
 ```
 bartender-lab/
 ├── apps/
-│   └── api/                 API REST (NestJS 11 + Prisma 6 + PostgreSQL)
-│       ├── prisma/          esquema, migraciones y seed de desarrollo
-│       ├── src/             un módulo por dominio (auth, recipes, sync, …)
-│       └── test/            pruebas unitarias (unit/) y e2e contra PostgreSQL (e2e/)
+│   ├── api/                 API REST (NestJS 11 + Prisma 6 + PostgreSQL)
+│   │   ├── prisma/          esquema, migraciones, catálogo inicial y seed
+│   │   ├── src/             un módulo por dominio (auth, recipes, sync, …)
+│   │   └── test/            pruebas unitarias (unit/) y e2e contra PostgreSQL (e2e/)
+│   └── mobile/              app Expo / React Native (11 pantallas, barra inferior)
 ├── packages/
-│   └── shared/              dominio determinista compartido con la app móvil
-│                            (motor de coincidencia, escalado de cantidades, enumeraciones)
+│   ├── shared/              dominio determinista (motor de coincidencia, escalado, enumeraciones)
+│   └── client-core/         núcleo offline de la app: SQLite, catálogo incorporado,
+│                            cola de operaciones y motor de sincronización
 ├── docs/
 │   ├── arquitectura.md      visión técnica completa, incluido el protocolo de sincronización
 │   ├── adr/                 registro de decisiones técnicas
@@ -67,13 +71,22 @@ npm run start -w @bartender-lab/api            # http://localhost:3000/api/v1
 - Administrador inicial: definir `SEED_ADMIN_EMAIL` y `SEED_ADMIN_PASSWORD` (≥ 12 caracteres)
   en `apps/api/.env` y volver a ejecutar el seed.
 
+## App móvil (APK)
+
+```bash
+npm run apk -w @bartender-lab/mobile     # requiere JDK 17+ y ANDROID_HOME → apps/mobile/dist/bartender-lab.apk
+```
+
+También la genera el workflow `bartender-lab-apk` de GitHub Actions (artefacto descargable).
+Instalación: [docs/movil/instalar-apk.md](docs/movil/instalar-apk.md).
+
 ## Pruebas y calidad
 
 ```bash
 npm run lint            # ESLint
 npm run format:check    # Prettier
 npm run typecheck       # TypeScript estricto
-npm test                # unitarias (shared + API), sin base de datos
+npm test                # unitarias (shared, client-core y API), sin base de datos
 npm run test:e2e        # e2e contra PostgreSQL real (base bartender_lab_test)
 ```
 
@@ -98,4 +111,8 @@ ejecuta todo lo anterior contra un PostgreSQL 16 de servicio.
 
 - [Arquitectura](docs/arquitectura.md)
 - [Decisiones técnicas (ADR)](docs/adr/README.md)
-- Fases: [1](docs/fases/fase-01.md) · [2](docs/fases/fase-02.md) · [3](docs/fases/fase-03.md)
+- Fases: [1](docs/fases/fase-01.md) · [2](docs/fases/fase-02.md) · [3](docs/fases/fase-03.md) ·
+  [4](docs/fases/fase-04.md) · [5](docs/fases/fase-05.md) · [6](docs/fases/fase-06.md) ·
+  [7](docs/fases/fase-07.md) · [8](docs/fases/fase-08.md) · [9](docs/fases/fase-09.md) ·
+  [10](docs/fases/fase-10.md) · [11](docs/fases/fase-11.md)
+- [Instalar el APK](docs/movil/instalar-apk.md)

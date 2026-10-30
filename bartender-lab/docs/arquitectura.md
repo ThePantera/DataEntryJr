@@ -4,7 +4,7 @@
 
 ```
 ┌─────────────────────────────┐        HTTPS / JSON         ┌──────────────────────────────┐
-│ App móvil (Expo, Fase 4+)   │ ──────────────────────────► │ API REST NestJS  /api/v1     │
+│ App móvil (Expo SDK 54)     │ ──────────────────────────► │ API REST NestJS  /api/v1     │
 │  · SQLite (copia local)     │ ◄────────────────────────── │  · Guards: rate limit → JWT  │
 │  · cola de operaciones      │                             │    → roles                   │
 │  · @bartender-lab/shared    │                             │  · @bartender-lab/shared     │
@@ -84,10 +84,11 @@ minúsculas, una sustitución no puede ser el mismo ingrediente…).
 
 ## 5. Arquitectura online/offline
 
-PostgreSQL es la fuente de verdad. La app guardará en SQLite las recetas que el usuario descargue y
-sus datos personales. El lado servidor del protocolo está implementado y probado; el cliente es la
-Fase 8. El protocolo completo, con sus reglas de conflicto, está en
-[ADR-0005](adr/0005-sincronizacion.md). En resumen:
+PostgreSQL es la fuente de verdad del servidor. La app trae el catálogo inicial incorporado y guarda
+en SQLite las recetas y los datos personales; funciona completa **sin servidor**
+([ADR-0010](adr/0010-app-offline-first-con-catalogo-incorporado.md)). El cliente vive en
+`packages/client-core` ([ADR-0012](adr/0012-nucleo-cliente-independiente.md)) y el protocolo, con
+sus reglas de conflicto, en [ADR-0005](adr/0005-sincronizacion.md). En resumen:
 
 **Contenido público (recetas, técnicas, ingredientes…)**
 
@@ -113,7 +114,7 @@ Fase 8. El protocolo completo, con sus reglas de conflicto, está en
    las lápidas (`deletedAt`).
 
 Las recetas descargadas se pueden usar **sin autenticación y sin conexión**: todos los endpoints de
-contenido son públicos y la app los consultará desde SQLite.
+contenido son públicos y la app los consulta desde SQLite.
 
 ## 6. Motor de coincidencia
 

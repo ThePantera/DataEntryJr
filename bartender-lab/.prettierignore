@@ -4,3 +4,7 @@ coverage
 package-lock.json
 apps/api/prisma/migrations
 docs/api/openapi.json
+apps/mobile/android
+apps/mobile/ios
+apps/mobile/.expo
+packages/client-core/data/catalog.json

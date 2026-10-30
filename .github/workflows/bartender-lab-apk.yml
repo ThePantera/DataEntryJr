@@ -1,0 +1,40 @@
+name: bartender-lab-apk
+
+# Builds the installable Android APK and publishes it as a downloadable artifact.
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'bartender-lab/apps/mobile/**'
+      - 'bartender-lab/packages/**'
+      - '.github/workflows/bartender-lab-apk.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    defaults:
+      run:
+        working-directory: bartender-lab
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: bartender-lab/.nvmrc
+          cache: npm
+          cache-dependency-path: bartender-lab/package-lock.json
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - run: npm ci
+      - run: npm run build -w @bartender-lab/shared
+      - run: npm run apk -w @bartender-lab/mobile
+      - uses: actions/upload-artifact@v4
+        with:
+          name: bartender-lab-apk
+          path: bartender-lab/apps/mobile/dist/bartender-lab.apk
+          retention-days: 30

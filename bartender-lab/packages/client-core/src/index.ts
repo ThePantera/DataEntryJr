@@ -9,3 +9,4 @@ export * from './schema';
 export * from './sync-engine';
 export * from './text';
 export * from './user-data';
+export * from './format';

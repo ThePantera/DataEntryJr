@@ -277,12 +277,18 @@ export class SyncEngine {
       return report;
     } catch (error) {
       await this.outbox.resetInFlight();
-      if (error instanceof OfflineError)
-        return { ...report, status: 'offline', message: error.message };
-      if (error instanceof NotConfiguredError) return emptyReport('not-configured');
-      if (error instanceof SessionExpiredError)
-        return { ...report, status: 'session-expired', message: error.message };
-      if (error instanceof ApiError) return { ...report, status: 'error', message: error.message };
+      // Compared by name too: transpiled subclasses of Error may lose their prototype chain.
+      const name = error instanceof Error ? error.name : '';
+      const message = error instanceof Error ? error.message : undefined;
+      if (error instanceof OfflineError || name === 'OfflineError')
+        return { ...report, status: 'offline', message };
+      if (error instanceof NotConfiguredError || name === 'NotConfiguredError')
+        return emptyReport('not-configured');
+      if (error instanceof SessionExpiredError || name === 'SessionExpiredError') {
+        return { ...report, status: 'session-expired', message };
+      }
+      if (error instanceof ApiError || name === 'ApiError')
+        return { ...report, status: 'error', message };
       throw error;
     }
   }
