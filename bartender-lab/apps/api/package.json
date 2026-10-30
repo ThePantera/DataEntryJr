@@ -10,7 +10,7 @@
     "typecheck": "prisma generate && tsc -p tsconfig.json --noEmit",
     "start": "node dist/main.js",
     "start:dev": "nest start --watch",
-    "pretest": "npm run build -w @bartender-lab/shared",
+    "pretest": "npm run build -w @bartender-lab/shared && prisma generate",
     "test": "jest",
     "pretest:e2e": "npm run build -w @bartender-lab/shared && prisma generate",
     "test:e2e": "jest --config test/jest-e2e.config.js --runInBand",
@@ -19,7 +19,8 @@
     "db:deploy": "prisma migrate deploy",
     "db:seed": "prisma db seed",
     "db:reset": "prisma migrate reset --force",
-    "manifest:rebuild": "tsx scripts/rebuild-manifest.ts"
+    "manifest:rebuild": "tsx scripts/rebuild-manifest.ts",
+    "openapi:export": "npm run build && node dist/scripts/export-openapi.js"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"

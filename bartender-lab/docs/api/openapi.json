@@ -1,0 +1,4593 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/api/v1/health": {
+      "get": {
+        "operationId": "HealthController_check",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "La API y la base de datos responden."
+          }
+        },
+        "tags": [
+          "health"
+        ]
+      }
+    },
+    "/api/v1/auth/register": {
+      "post": {
+        "operationId": "AuthController_register",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthResponseDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Demasiados intentos; esperar y reintentar."
+          }
+        },
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/api/v1/auth/login": {
+      "post": {
+        "operationId": "AuthController_login",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthResponseDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Demasiados intentos; esperar y reintentar."
+          }
+        },
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/api/v1/auth/refresh": {
+      "post": {
+        "operationId": "AuthController_refresh",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshTokenDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Rota el refresh token: el anterior deja de ser válido.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthResponseDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Demasiados intentos; esperar y reintentar."
+          }
+        },
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/api/v1/auth/logout": {
+      "post": {
+        "operationId": "AuthController_logout",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshTokenDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Revoca la sesión (toda la familia del refresh token)."
+          },
+          "429": {
+            "description": "Demasiados intentos; esperar y reintentar."
+          }
+        },
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/api/v1/users/me": {
+      "get": {
+        "operationId": "UsersController_me",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserProfileDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "users"
+        ]
+      },
+      "patch": {
+        "operationId": "UsersController_updateMe",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateProfileDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserProfileDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "users"
+        ]
+      }
+    },
+    "/api/v1/users/{id}/role": {
+      "patch": {
+        "operationId": "UsersController_updateRole",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateRoleDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserProfileDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Solo administradores."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "users"
+        ]
+      }
+    },
+    "/api/v1/categories": {
+      "get": {
+        "operationId": "CategoriesController_list",
+        "parameters": [
+          {
+            "name": "kind",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "INGREDIENT",
+                "RECIPE"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CategoryDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "categories"
+        ]
+      }
+    },
+    "/api/v1/ingredients": {
+      "get": {
+        "operationId": "IngredientsController_list",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "default": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "pageSize",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20,
+              "type": "number"
+            }
+          },
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "description": "Búsqueda por nombre (sin distinguir mayúsculas).",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "categoryId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IngredientPageDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "ingredients"
+        ]
+      },
+      "post": {
+        "operationId": "IngredientsController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateIngredientDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IngredientDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Solo editores y administradores."
+          },
+          "409": {
+            "description": "Ya existe un ingrediente con ese nombre."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "ingredients"
+        ]
+      }
+    },
+    "/api/v1/ingredients/{id}": {
+      "get": {
+        "operationId": "IngredientsController_get",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IngredientDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "ingredients"
+        ]
+      },
+      "patch": {
+        "operationId": "IngredientsController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateIngredientDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IngredientDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Solo editores y administradores."
+          },
+          "409": {
+            "description": "Versión desactualizada o nombre duplicado."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "ingredients"
+        ]
+      }
+    },
+    "/api/v1/glassware": {
+      "get": {
+        "operationId": "GlasswareController_list",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GlasswareDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "glassware"
+        ]
+      }
+    },
+    "/api/v1/glassware/{id}": {
+      "get": {
+        "operationId": "GlasswareController_get",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GlasswareDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "glassware"
+        ]
+      }
+    },
+    "/api/v1/equipment": {
+      "get": {
+        "operationId": "EquipmentController_list",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EquipmentDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "equipment"
+        ]
+      }
+    },
+    "/api/v1/equipment/{id}": {
+      "get": {
+        "operationId": "EquipmentController_get",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EquipmentDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "equipment"
+        ]
+      }
+    },
+    "/api/v1/techniques": {
+      "get": {
+        "operationId": "TechniquesController_list",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TechniqueDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "techniques"
+        ]
+      }
+    },
+    "/api/v1/techniques/{id}": {
+      "get": {
+        "operationId": "TechniquesController_get",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TechniqueDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "techniques"
+        ]
+      }
+    },
+    "/api/v1/recipes": {
+      "get": {
+        "operationId": "RecipesController_list",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "default": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "pageSize",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20,
+              "type": "number"
+            }
+          },
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "description": "Busca en el nombre de la receta y de sus ingredientes.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "difficulty",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "EASY",
+                "MEDIUM",
+                "HARD"
+              ]
+            }
+          },
+          {
+            "name": "categoryId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "ingredientId",
+            "required": false,
+            "in": "query",
+            "description": "Recetas que usan este ingrediente.",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "origin",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "CLASSIC",
+                "ORIGINAL"
+              ]
+            }
+          },
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "description": "Solo editores/administradores pueden pedir estados distintos de PUBLISHED.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "DRAFT",
+                "REVIEW",
+                "VERIFIED",
+                "PUBLISHED"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Por defecto solo recetas publicadas.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecipePageDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "recipes"
+        ]
+      },
+      "post": {
+        "operationId": "RecipesController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRecipeDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Se crea siempre en estado DRAFT.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecipeDetailDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Solo editores y administradores."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "recipes"
+        ]
+      }
+    },
+    "/api/v1/recipes/categories": {
+      "get": {
+        "operationId": "RecipesController_categories",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RecipeCategoryDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "recipes"
+        ]
+      }
+    },
+    "/api/v1/recipes/match": {
+      "post": {
+        "operationId": "RecipesController_match",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MatchRecipesDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MatchResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "recipes"
+        ]
+      }
+    },
+    "/api/v1/recipes/{id}": {
+      "get": {
+        "operationId": "RecipesController_get",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "servings",
+            "required": false,
+            "in": "query",
+            "description": "Escala las cantidades.",
+            "schema": {
+              "minimum": 1,
+              "maximum": 100,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecipeDetailDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "recipes"
+        ]
+      },
+      "patch": {
+        "operationId": "RecipesController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateRecipeDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecipeDetailDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Las recetas verificadas/publicadas solo las edita un administrador."
+          },
+          "409": {
+            "description": "Versión desactualizada o slug duplicado."
+          },
+          "422": {
+            "description": "La edición dejaría incompleta una receta oficial."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "recipes"
+        ]
+      }
+    },
+    "/api/v1/recipes/{id}/ingredients": {
+      "get": {
+        "operationId": "RecipesController_ingredients",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "servings",
+            "required": false,
+            "in": "query",
+            "description": "Escala las cantidades.",
+            "schema": {
+              "minimum": 1,
+              "maximum": 100,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RecipeIngredientDto"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "recipes"
+        ]
+      }
+    },
+    "/api/v1/recipes/{id}/steps": {
+      "get": {
+        "operationId": "RecipesController_steps",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RecipeStepDto"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "recipes"
+        ]
+      }
+    },
+    "/api/v1/recipes/{id}/status": {
+      "post": {
+        "operationId": "RecipesController_changeStatus",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangeRecipeStatusDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecipeDetailDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Publicar y despublicar es exclusivo de administradores."
+          },
+          "409": {
+            "description": "Transición no permitida."
+          },
+          "422": {
+            "description": "Faltan cantidades, método, vaso, hielo o instrucciones."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "recipes"
+        ]
+      }
+    },
+    "/api/v1/inventory": {
+      "get": {
+        "operationId": "InventoryController_list",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/InventoryItemDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "inventory"
+        ]
+      },
+      "post": {
+        "operationId": "InventoryController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateInventoryItemDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InventoryItemDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "El ingrediente ya está en el inventario."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "inventory"
+        ]
+      }
+    },
+    "/api/v1/inventory/{id}": {
+      "patch": {
+        "operationId": "InventoryController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateInventoryItemDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InventoryItemDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": ""
+          },
+          "409": {
+            "description": "Versión desactualizada."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "inventory"
+        ]
+      },
+      "delete": {
+        "operationId": "InventoryController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "404": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "inventory"
+        ]
+      }
+    },
+    "/api/v1/favorites": {
+      "get": {
+        "operationId": "FavoritesController_list",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FavoriteWithRecipeDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "favorites"
+        ]
+      }
+    },
+    "/api/v1/favorites/{recipeId}": {
+      "post": {
+        "operationId": "FavoritesController_add",
+        "parameters": [
+          {
+            "name": "recipeId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Idempotente: repetir devuelve el mismo favorito.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FavoriteDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "La receta no existe o no está publicada."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "favorites"
+        ]
+      },
+      "delete": {
+        "operationId": "FavoritesController_remove",
+        "parameters": [
+          {
+            "name": "recipeId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Idempotente."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "favorites"
+        ]
+      }
+    },
+    "/api/v1/shopping-lists": {
+      "get": {
+        "operationId": "ShoppingListsController_list",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ShoppingListOverviewDto"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "La lista o el ítem no existen o no son del usuario."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "shopping-lists"
+        ]
+      },
+      "post": {
+        "operationId": "ShoppingListsController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateShoppingListDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ShoppingListDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "La lista o el ítem no existen o no son del usuario."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "shopping-lists"
+        ]
+      }
+    },
+    "/api/v1/shopping-lists/{id}": {
+      "get": {
+        "operationId": "ShoppingListsController_get",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ShoppingListDetailDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "La lista o el ítem no existen o no son del usuario."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "shopping-lists"
+        ]
+      },
+      "patch": {
+        "operationId": "ShoppingListsController_rename",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateShoppingListDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ShoppingListDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "La lista o el ítem no existen o no son del usuario."
+          },
+          "409": {
+            "description": "Versión desactualizada."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "shopping-lists"
+        ]
+      },
+      "delete": {
+        "operationId": "ShoppingListsController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "404": {
+            "description": "La lista o el ítem no existen o no son del usuario."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "shopping-lists"
+        ]
+      }
+    },
+    "/api/v1/shopping-lists/{id}/items": {
+      "post": {
+        "operationId": "ShoppingListsController_addItem",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateShoppingListItemDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ShoppingListItemDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "La lista o el ítem no existen o no son del usuario."
+          },
+          "409": {
+            "description": "El ingrediente ya está en la lista."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "shopping-lists"
+        ]
+      }
+    },
+    "/api/v1/shopping-lists/{id}/items/{itemId}": {
+      "patch": {
+        "operationId": "ShoppingListsController_updateItem",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "itemId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateShoppingListItemDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ShoppingListItemDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "La lista o el ítem no existen o no son del usuario."
+          },
+          "409": {
+            "description": "Versión desactualizada."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "shopping-lists"
+        ]
+      },
+      "delete": {
+        "operationId": "ShoppingListsController_removeItem",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "itemId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "404": {
+            "description": "La lista o el ítem no existen o no son del usuario."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "shopping-lists"
+        ]
+      }
+    },
+    "/api/v1/sync/manifest": {
+      "get": {
+        "operationId": "SyncController_manifest",
+        "parameters": [
+          {
+            "name": "types",
+            "required": false,
+            "in": "query",
+            "description": "Tipos separados por coma.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ManifestResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Versión publicada de cada recurso descargable.",
+        "tags": [
+          "sync"
+        ]
+      }
+    },
+    "/api/v1/sync/changes": {
+      "get": {
+        "operationId": "SyncController_changes",
+        "parameters": [
+          {
+            "name": "since",
+            "required": false,
+            "in": "query",
+            "description": "Valor nextSince de la respuesta anterior (ISO 8601). Omitir en la primera sincronización.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChangesResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Cambios desde un cursor: contenido público y, si hay token, los datos propios con lápidas.",
+        "tags": [
+          "sync"
+        ]
+      }
+    },
+    "/api/v1/sync/push": {
+      "post": {
+        "operationId": "SyncController_push",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SyncPushDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SyncPushResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Aplica la cola de operaciones pendientes del cliente (idempotente por opId).",
+        "tags": [
+          "sync"
+        ]
+      }
+    },
+    "/api/v1/ai/recommend": {
+      "post": {
+        "operationId": "AiAssistantController_recommend",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RecommendDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecommendResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Recomienda recetas preparables (motor de reglas, sin LLM).",
+        "tags": [
+          "ai"
+        ]
+      }
+    },
+    "/api/v1/ai/substitute": {
+      "post": {
+        "operationId": "AiAssistantController_substitute",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SubstituteDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SubstituteResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Sustituciones aprobadas para un ingrediente.",
+        "tags": [
+          "ai"
+        ]
+      }
+    },
+    "/api/v1/ai/explain": {
+      "post": {
+        "operationId": "AiAssistantController_explain",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExplainDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExplainResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Explica una técnica, una receta o un paso con contenido verificado.",
+        "tags": [
+          "ai"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "BARTENDER LAB API",
+    "description": "API REST de BARTENDER LAB. El contenido publicado (recetas, técnicas, ingredientes) es público; los datos personales requieren un access token Bearer.",
+    "version": "1.0.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "securitySchemes": {
+      "bearer": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http"
+      }
+    },
+    "schemas": {
+      "RegisterDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "ana@example.com",
+            "maxLength": 254
+          },
+          "password": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 128,
+            "example": "una-contraseña-larga"
+          },
+          "displayName": {
+            "type": "string",
+            "example": "Ana",
+            "minLength": 1,
+            "maxLength": 80
+          }
+        },
+        "required": [
+          "email",
+          "password",
+          "displayName"
+        ]
+      },
+      "UserProfileDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "email": {
+            "type": "string"
+          },
+          "displayName": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "USER",
+              "EDITOR",
+              "ADMIN"
+            ]
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "email",
+          "displayName",
+          "role",
+          "createdAt"
+        ]
+      },
+      "AuthResponseDto": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "$ref": "#/components/schemas/UserProfileDto"
+          },
+          "accessToken": {
+            "type": "string",
+            "description": "JWT de acceso (Bearer)."
+          },
+          "accessTokenExpiresIn": {
+            "type": "number",
+            "description": "Segundos de validez del access token."
+          },
+          "refreshToken": {
+            "type": "string",
+            "description": "Token opaco de un solo uso para renovar la sesión."
+          },
+          "refreshTokenExpiresAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "user",
+          "accessToken",
+          "accessTokenExpiresIn",
+          "refreshToken",
+          "refreshTokenExpiresAt"
+        ]
+      },
+      "LoginDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "ana@example.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "una-contraseña-larga"
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ]
+      },
+      "RefreshTokenDto": {
+        "type": "object",
+        "properties": {
+          "refreshToken": {
+            "type": "string",
+            "description": "Refresh token opaco recibido en login/registro/refresh."
+          }
+        },
+        "required": [
+          "refreshToken"
+        ]
+      },
+      "UpdateProfileDto": {
+        "type": "object",
+        "properties": {
+          "displayName": {
+            "type": "string",
+            "example": "Ana",
+            "minLength": 1,
+            "maxLength": 80
+          }
+        },
+        "required": [
+          "displayName"
+        ]
+      },
+      "UpdateRoleDto": {
+        "type": "object",
+        "properties": {
+          "role": {
+            "type": "string",
+            "enum": [
+              "USER",
+              "EDITOR",
+              "ADMIN"
+            ]
+          }
+        },
+        "required": [
+          "role"
+        ]
+      },
+      "CategoryDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "INGREDIENT",
+              "RECIPE"
+            ]
+          },
+          "version": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "description",
+          "kind",
+          "version"
+        ]
+      },
+      "IngredientCategoryDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ]
+      },
+      "IngredientDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "category": {
+            "$ref": "#/components/schemas/IngredientCategoryDto"
+          },
+          "alcoholPercentage": {
+            "type": "number"
+          },
+          "imageUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "allergens": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "CELERY",
+                "GLUTEN",
+                "CRUSTACEANS",
+                "EGGS",
+                "FISH",
+                "LUPIN",
+                "MILK",
+                "MOLLUSCS",
+                "MUSTARD",
+                "TREE_NUTS",
+                "PEANUTS",
+                "SESAME",
+                "SOY",
+                "SULPHITES"
+              ]
+            }
+          },
+          "version": {
+            "type": "number"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "description",
+          "category",
+          "alcoholPercentage",
+          "imageUrl",
+          "allergens",
+          "version",
+          "updatedAt"
+        ]
+      },
+      "IngredientPageDto": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IngredientDto"
+            }
+          },
+          "page": {
+            "type": "number"
+          },
+          "pageSize": {
+            "type": "number"
+          },
+          "total": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "items",
+          "page",
+          "pageSize",
+          "total"
+        ]
+      },
+      "CreateIngredientDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Gin",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 2000
+          },
+          "categoryId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Categoría de tipo INGREDIENT."
+          },
+          "alcoholPercentage": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100,
+            "default": 0
+          },
+          "imageUrl": {
+            "type": "string",
+            "example": "https://cdn.example.com/gin.webp"
+          },
+          "allergens": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "CELERY",
+                "GLUTEN",
+                "CRUSTACEANS",
+                "EGGS",
+                "FISH",
+                "LUPIN",
+                "MILK",
+                "MOLLUSCS",
+                "MUSTARD",
+                "TREE_NUTS",
+                "PEANUTS",
+                "SESAME",
+                "SOY",
+                "SULPHITES"
+              ]
+            }
+          }
+        },
+        "required": [
+          "name",
+          "categoryId"
+        ]
+      },
+      "UpdateIngredientDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Gin",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 2000
+          },
+          "categoryId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Categoría de tipo INGREDIENT."
+          },
+          "alcoholPercentage": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100,
+            "default": 0
+          },
+          "imageUrl": {
+            "type": "string",
+            "example": "https://cdn.example.com/gin.webp"
+          },
+          "allergens": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "CELERY",
+                "GLUTEN",
+                "CRUSTACEANS",
+                "EGGS",
+                "FISH",
+                "LUPIN",
+                "MILK",
+                "MOLLUSCS",
+                "MUSTARD",
+                "TREE_NUTS",
+                "PEANUTS",
+                "SESAME",
+                "SOY",
+                "SULPHITES"
+              ]
+            }
+          },
+          "version": {
+            "type": "number",
+            "description": "Versión que se está editando. Si no coincide con la actual, responde 409."
+          }
+        }
+      },
+      "GlasswareDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "capacityMl": {
+            "type": "number",
+            "nullable": true
+          },
+          "imageUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "version": {
+            "type": "number"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "description",
+          "capacityMl",
+          "imageUrl",
+          "version",
+          "updatedAt"
+        ]
+      },
+      "EquipmentDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "imageUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "version": {
+            "type": "number"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "description",
+          "imageUrl",
+          "version",
+          "updatedAt"
+        ]
+      },
+      "TechniqueEquipmentDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ]
+      },
+      "TechniqueDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "durationSeconds": {
+            "type": "number",
+            "nullable": true,
+            "description": "Duración típica en segundos."
+          },
+          "instructions": {
+            "type": "string"
+          },
+          "commonMistakes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "equipment": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TechniqueEquipmentDto"
+            }
+          },
+          "version": {
+            "type": "number"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "description",
+          "durationSeconds",
+          "instructions",
+          "commonMistakes",
+          "equipment",
+          "version",
+          "updatedAt"
+        ]
+      },
+      "GlasswareRefDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "capacityMl": {
+            "type": "number",
+            "nullable": true
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "capacityMl"
+        ]
+      },
+      "NamedRefDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ]
+      },
+      "RecipeSummaryDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "slug": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "difficulty": {
+            "type": "string",
+            "enum": [
+              "EASY",
+              "MEDIUM",
+              "HARD"
+            ]
+          },
+          "preparationTimeSeconds": {
+            "type": "number",
+            "nullable": true
+          },
+          "glassware": {
+            "nullable": true,
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/GlasswareRefDto"
+              }
+            ]
+          },
+          "technique": {
+            "nullable": true,
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/NamedRefDto"
+              }
+            ]
+          },
+          "iceType": {
+            "type": "string",
+            "enum": [
+              "NONE",
+              "CUBED",
+              "CRUSHED",
+              "LARGE_CUBE",
+              "SPHERE",
+              "BLOCK",
+              "SHAVED"
+            ],
+            "nullable": true
+          },
+          "imageUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "origin": {
+            "type": "string",
+            "enum": [
+              "CLASSIC",
+              "ORIGINAL"
+            ]
+          },
+          "isOfficialClassic": {
+            "type": "boolean",
+            "description": "Clásico verificado y publicado."
+          },
+          "verificationStatus": {
+            "type": "string",
+            "enum": [
+              "DRAFT",
+              "REVIEW",
+              "VERIFIED",
+              "PUBLISHED"
+            ]
+          },
+          "version": {
+            "type": "number"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "slug",
+          "description",
+          "difficulty",
+          "preparationTimeSeconds",
+          "glassware",
+          "technique",
+          "iceType",
+          "imageUrl",
+          "origin",
+          "isOfficialClassic",
+          "verificationStatus",
+          "version",
+          "updatedAt"
+        ]
+      },
+      "RecipePageDto": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RecipeSummaryDto"
+            }
+          },
+          "page": {
+            "type": "number"
+          },
+          "pageSize": {
+            "type": "number"
+          },
+          "total": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "items",
+          "page",
+          "pageSize",
+          "total"
+        ]
+      },
+      "RecipeCategoryDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "publishedRecipeCount": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "description",
+          "publishedRecipeCount"
+        ]
+      },
+      "MatchRecipesDto": {
+        "type": "object",
+        "properties": {
+          "ingredientIds": {
+            "description": "Ingredientes disponibles.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          "useInventory": {
+            "type": "boolean",
+            "description": "Suma el inventario guardado del usuario (requiere autenticación).",
+            "default": false
+          },
+          "includeIncomplete": {
+            "type": "boolean",
+            "default": true
+          },
+          "maxMissing": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 20,
+            "description": "Máximo de faltantes en INCOMPLETE."
+          },
+          "limit": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 200,
+            "default": 50
+          }
+        }
+      },
+      "MatchIngredientRefDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ]
+      },
+      "MatchSubstitutionDto": {
+        "type": "object",
+        "properties": {
+          "ingredientId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "ingredientName": {
+            "type": "string"
+          },
+          "substituteId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "substituteName": {
+            "type": "string"
+          },
+          "ratio": {
+            "type": "number",
+            "description": "Cantidad del sustituto = cantidad original × ratio."
+          },
+          "notes": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": [
+          "ingredientId",
+          "ingredientName",
+          "substituteId",
+          "substituteName",
+          "ratio",
+          "notes"
+        ]
+      },
+      "RecipeMatchDto": {
+        "type": "object",
+        "properties": {
+          "recipeId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "recipeName": {
+            "type": "string"
+          },
+          "recipeSlug": {
+            "type": "string"
+          },
+          "origin": {
+            "type": "string",
+            "enum": [
+              "CLASSIC",
+              "ORIGINAL"
+            ]
+          },
+          "isOfficialClassic": {
+            "type": "boolean"
+          },
+          "classification": {
+            "type": "string",
+            "enum": [
+              "EXACT_MATCH",
+              "ADAPTABLE",
+              "INCOMPLETE"
+            ]
+          },
+          "requiredCount": {
+            "type": "number"
+          },
+          "availableRequiredCount": {
+            "type": "number"
+          },
+          "missingRequired": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MatchIngredientRefDto"
+            }
+          },
+          "missingOptional": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MatchIngredientRefDto"
+            }
+          },
+          "substitutions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MatchSubstitutionDto"
+            }
+          }
+        },
+        "required": [
+          "recipeId",
+          "recipeName",
+          "recipeSlug",
+          "origin",
+          "isOfficialClassic",
+          "classification",
+          "requiredCount",
+          "availableRequiredCount",
+          "missingRequired",
+          "missingOptional",
+          "substitutions"
+        ]
+      },
+      "MatchResponseDto": {
+        "type": "object",
+        "properties": {
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RecipeMatchDto"
+            }
+          },
+          "evaluatedRecipes": {
+            "type": "number",
+            "description": "Recetas publicadas evaluadas."
+          },
+          "engine": {
+            "type": "string",
+            "description": "Motor determinista; la IA no altera sus reglas."
+          }
+        },
+        "required": [
+          "results",
+          "evaluatedRecipes",
+          "engine"
+        ]
+      },
+      "RecipeIngredientDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "ingredientId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "number",
+            "nullable": true
+          },
+          "unit": {
+            "type": "string",
+            "enum": [
+              "ML",
+              "CL",
+              "OZ",
+              "DASH",
+              "DROP",
+              "BARSPOON",
+              "TEASPOON",
+              "TABLESPOON",
+              "GRAM",
+              "UNIT",
+              "SLICE",
+              "WEDGE",
+              "SPRIG",
+              "LEAF",
+              "PINCH",
+              "TOP_UP"
+            ]
+          },
+          "optional": {
+            "type": "boolean"
+          },
+          "position": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "ingredientId",
+          "name",
+          "quantity",
+          "unit",
+          "optional",
+          "position"
+        ]
+      },
+      "RecipeStepDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "stepNumber": {
+            "type": "number"
+          },
+          "instruction": {
+            "type": "string"
+          },
+          "durationSeconds": {
+            "type": "number",
+            "nullable": true
+          },
+          "imageUrl": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": [
+          "id",
+          "stepNumber",
+          "instruction",
+          "durationSeconds",
+          "imageUrl"
+        ]
+      },
+      "RecipeDetailDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "slug": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "difficulty": {
+            "type": "string",
+            "enum": [
+              "EASY",
+              "MEDIUM",
+              "HARD"
+            ]
+          },
+          "preparationTimeSeconds": {
+            "type": "number",
+            "nullable": true
+          },
+          "glassware": {
+            "nullable": true,
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/GlasswareRefDto"
+              }
+            ]
+          },
+          "technique": {
+            "nullable": true,
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/NamedRefDto"
+              }
+            ]
+          },
+          "iceType": {
+            "type": "string",
+            "enum": [
+              "NONE",
+              "CUBED",
+              "CRUSHED",
+              "LARGE_CUBE",
+              "SPHERE",
+              "BLOCK",
+              "SHAVED"
+            ],
+            "nullable": true
+          },
+          "imageUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "origin": {
+            "type": "string",
+            "enum": [
+              "CLASSIC",
+              "ORIGINAL"
+            ]
+          },
+          "isOfficialClassic": {
+            "type": "boolean",
+            "description": "Clásico verificado y publicado."
+          },
+          "verificationStatus": {
+            "type": "string",
+            "enum": [
+              "DRAFT",
+              "REVIEW",
+              "VERIFIED",
+              "PUBLISHED"
+            ]
+          },
+          "version": {
+            "type": "number"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "history": {
+            "type": "string",
+            "nullable": true
+          },
+          "servings": {
+            "type": "number",
+            "description": "Porciones de las cantidades devueltas."
+          },
+          "baseServings": {
+            "type": "number",
+            "description": "Porciones de la receta original."
+          },
+          "garnish": {
+            "type": "string",
+            "nullable": true
+          },
+          "alcoholPercentageEstimated": {
+            "type": "number",
+            "nullable": true
+          },
+          "instructions": {
+            "type": "string",
+            "nullable": true
+          },
+          "source": {
+            "type": "string",
+            "nullable": true
+          },
+          "categories": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/NamedRefDto"
+            }
+          },
+          "allergens": {
+            "type": "array",
+            "description": "Unión de alérgenos de sus ingredientes.",
+            "items": {
+              "type": "string",
+              "enum": [
+                "CELERY",
+                "GLUTEN",
+                "CRUSTACEANS",
+                "EGGS",
+                "FISH",
+                "LUPIN",
+                "MILK",
+                "MOLLUSCS",
+                "MUSTARD",
+                "TREE_NUTS",
+                "PEANUTS",
+                "SESAME",
+                "SOY",
+                "SULPHITES"
+              ]
+            }
+          },
+          "ingredients": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RecipeIngredientDto"
+            }
+          },
+          "steps": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RecipeStepDto"
+            }
+          },
+          "publishedAt": {
+            "format": "date-time",
+            "type": "string",
+            "nullable": true
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "slug",
+          "description",
+          "difficulty",
+          "preparationTimeSeconds",
+          "glassware",
+          "technique",
+          "iceType",
+          "imageUrl",
+          "origin",
+          "isOfficialClassic",
+          "verificationStatus",
+          "version",
+          "updatedAt",
+          "history",
+          "servings",
+          "baseServings",
+          "garnish",
+          "alcoholPercentageEstimated",
+          "instructions",
+          "source",
+          "categories",
+          "allergens",
+          "ingredients",
+          "steps",
+          "publishedAt",
+          "createdAt"
+        ]
+      },
+      "RecipeIngredientInputDto": {
+        "type": "object",
+        "properties": {
+          "ingredientId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "quantity": {
+            "type": "number",
+            "nullable": true,
+            "description": "Obligatoria salvo para la unidad TOP_UP (completar), que no lleva cantidad."
+          },
+          "unit": {
+            "type": "string",
+            "enum": [
+              "ML",
+              "CL",
+              "OZ",
+              "DASH",
+              "DROP",
+              "BARSPOON",
+              "TEASPOON",
+              "TABLESPOON",
+              "GRAM",
+              "UNIT",
+              "SLICE",
+              "WEDGE",
+              "SPRIG",
+              "LEAF",
+              "PINCH",
+              "TOP_UP"
+            ]
+          },
+          "optional": {
+            "type": "boolean",
+            "default": false
+          }
+        },
+        "required": [
+          "ingredientId",
+          "unit"
+        ]
+      },
+      "RecipeStepInputDto": {
+        "type": "object",
+        "properties": {
+          "instruction": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2000
+          },
+          "durationSeconds": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 3600
+          },
+          "imageUrl": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "instruction"
+        ]
+      },
+      "CreateRecipeDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120,
+            "example": "Daiquiri"
+          },
+          "slug": {
+            "type": "string",
+            "description": "Se genera a partir del nombre si se omite.",
+            "example": "daiquiri"
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 2000
+          },
+          "history": {
+            "type": "object",
+            "maxLength": 5000
+          },
+          "difficulty": {
+            "type": "string",
+            "enum": [
+              "EASY",
+              "MEDIUM",
+              "HARD"
+            ]
+          },
+          "preparationTimeSeconds": {
+            "type": "object",
+            "minimum": 1,
+            "maximum": 7200
+          },
+          "servings": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 100,
+            "default": 1
+          },
+          "glasswareId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "techniqueId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true,
+            "description": "Método."
+          },
+          "iceType": {
+            "type": "string",
+            "enum": [
+              "NONE",
+              "CUBED",
+              "CRUSHED",
+              "LARGE_CUBE",
+              "SPHERE",
+              "BLOCK",
+              "SHAVED"
+            ],
+            "nullable": true
+          },
+          "garnish": {
+            "type": "object",
+            "maxLength": 200
+          },
+          "alcoholPercentageEstimated": {
+            "type": "object",
+            "minimum": 0,
+            "maximum": 100
+          },
+          "instructions": {
+            "type": "object",
+            "maxLength": 5000,
+            "description": "Resumen del método."
+          },
+          "imageUrl": {
+            "type": "object"
+          },
+          "source": {
+            "type": "object",
+            "maxLength": 500,
+            "description": "Fuente documental (obligatoria para clásicos)."
+          },
+          "origin": {
+            "type": "string",
+            "enum": [
+              "CLASSIC",
+              "ORIGINAL"
+            ],
+            "default": "CLASSIC"
+          },
+          "categoryIds": {
+            "description": "Categorías de tipo RECIPE.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          "ingredients": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RecipeIngredientInputDto"
+            }
+          },
+          "steps": {
+            "description": "En orden; se numeran desde 1.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RecipeStepInputDto"
+            }
+          }
+        },
+        "required": [
+          "name",
+          "description",
+          "difficulty",
+          "ingredients",
+          "steps"
+        ]
+      },
+      "UpdateRecipeDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120,
+            "example": "Daiquiri"
+          },
+          "slug": {
+            "type": "string",
+            "description": "Se genera a partir del nombre si se omite.",
+            "example": "daiquiri"
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 2000
+          },
+          "history": {
+            "type": "object",
+            "maxLength": 5000
+          },
+          "difficulty": {
+            "type": "string",
+            "enum": [
+              "EASY",
+              "MEDIUM",
+              "HARD"
+            ]
+          },
+          "preparationTimeSeconds": {
+            "type": "object",
+            "minimum": 1,
+            "maximum": 7200
+          },
+          "servings": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 100,
+            "default": 1
+          },
+          "glasswareId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "techniqueId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true,
+            "description": "Método."
+          },
+          "iceType": {
+            "type": "string",
+            "enum": [
+              "NONE",
+              "CUBED",
+              "CRUSHED",
+              "LARGE_CUBE",
+              "SPHERE",
+              "BLOCK",
+              "SHAVED"
+            ],
+            "nullable": true
+          },
+          "garnish": {
+            "type": "object",
+            "maxLength": 200
+          },
+          "alcoholPercentageEstimated": {
+            "type": "object",
+            "minimum": 0,
+            "maximum": 100
+          },
+          "instructions": {
+            "type": "object",
+            "maxLength": 5000,
+            "description": "Resumen del método."
+          },
+          "imageUrl": {
+            "type": "object"
+          },
+          "source": {
+            "type": "object",
+            "maxLength": 500,
+            "description": "Fuente documental (obligatoria para clásicos)."
+          },
+          "origin": {
+            "type": "string",
+            "enum": [
+              "CLASSIC",
+              "ORIGINAL"
+            ],
+            "default": "CLASSIC"
+          },
+          "categoryIds": {
+            "description": "Categorías de tipo RECIPE.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          "ingredients": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RecipeIngredientInputDto"
+            }
+          },
+          "steps": {
+            "description": "En orden; se numeran desde 1.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RecipeStepInputDto"
+            }
+          },
+          "version": {
+            "type": "number",
+            "description": "Versión que se está editando; si no coincide responde 409."
+          }
+        }
+      },
+      "ChangeRecipeStatusDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "DRAFT",
+              "REVIEW",
+              "VERIFIED",
+              "PUBLISHED"
+            ]
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "InventoryItemDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "version": {
+            "type": "number",
+            "description": "Se incrementa en cada cambio; base de la detección de conflictos."
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "deletedAt": {
+            "format": "date-time",
+            "type": "string",
+            "nullable": true,
+            "description": "No nulo = eliminado (lápida para sync)."
+          },
+          "ingredientId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "ingredientName": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "number",
+            "nullable": true
+          },
+          "unit": {
+            "type": "string",
+            "enum": [
+              "ML",
+              "CL",
+              "OZ",
+              "DASH",
+              "DROP",
+              "BARSPOON",
+              "TEASPOON",
+              "TABLESPOON",
+              "GRAM",
+              "UNIT",
+              "SLICE",
+              "WEDGE",
+              "SPRIG",
+              "LEAF",
+              "PINCH",
+              "TOP_UP"
+            ],
+            "nullable": true
+          },
+          "expirationDate": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": [
+          "id",
+          "version",
+          "createdAt",
+          "updatedAt",
+          "deletedAt",
+          "ingredientId",
+          "ingredientName",
+          "quantity",
+          "unit",
+          "expirationDate"
+        ]
+      },
+      "CreateInventoryItemDto": {
+        "type": "object",
+        "properties": {
+          "quantity": {
+            "type": "number",
+            "nullable": true,
+            "minimum": 0,
+            "description": "0 = agotado."
+          },
+          "unit": {
+            "type": "string",
+            "enum": [
+              "ML",
+              "CL",
+              "OZ",
+              "DASH",
+              "DROP",
+              "BARSPOON",
+              "TEASPOON",
+              "TABLESPOON",
+              "GRAM",
+              "UNIT",
+              "SLICE",
+              "WEDGE",
+              "SPRIG",
+              "LEAF",
+              "PINCH",
+              "TOP_UP"
+            ],
+            "nullable": true
+          },
+          "expirationDate": {
+            "type": "string",
+            "nullable": true,
+            "example": "2027-12-31"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "UUID generado por el cliente (opcional)."
+          },
+          "ingredientId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "ingredientId"
+        ]
+      },
+      "UpdateInventoryItemDto": {
+        "type": "object",
+        "properties": {
+          "quantity": {
+            "type": "number",
+            "nullable": true,
+            "minimum": 0,
+            "description": "0 = agotado."
+          },
+          "unit": {
+            "type": "string",
+            "enum": [
+              "ML",
+              "CL",
+              "OZ",
+              "DASH",
+              "DROP",
+              "BARSPOON",
+              "TEASPOON",
+              "TABLESPOON",
+              "GRAM",
+              "UNIT",
+              "SLICE",
+              "WEDGE",
+              "SPRIG",
+              "LEAF",
+              "PINCH",
+              "TOP_UP"
+            ],
+            "nullable": true
+          },
+          "expirationDate": {
+            "type": "string",
+            "nullable": true,
+            "example": "2027-12-31"
+          },
+          "version": {
+            "type": "number",
+            "description": "Versión editada; si no coincide responde 409."
+          }
+        }
+      },
+      "FavoriteWithRecipeDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "version": {
+            "type": "number",
+            "description": "Se incrementa en cada cambio; base de la detección de conflictos."
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "deletedAt": {
+            "format": "date-time",
+            "type": "string",
+            "nullable": true,
+            "description": "No nulo = eliminado (lápida para sync)."
+          },
+          "recipeId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "recipeAvailable": {
+            "type": "boolean",
+            "description": "false si la receta dejó de estar publicada."
+          },
+          "recipe": {
+            "nullable": true,
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/RecipeSummaryDto"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "version",
+          "createdAt",
+          "updatedAt",
+          "deletedAt",
+          "recipeId",
+          "recipeAvailable",
+          "recipe"
+        ]
+      },
+      "FavoriteDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "version": {
+            "type": "number",
+            "description": "Se incrementa en cada cambio; base de la detección de conflictos."
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "deletedAt": {
+            "format": "date-time",
+            "type": "string",
+            "nullable": true,
+            "description": "No nulo = eliminado (lápida para sync)."
+          },
+          "recipeId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "id",
+          "version",
+          "createdAt",
+          "updatedAt",
+          "deletedAt",
+          "recipeId"
+        ]
+      },
+      "ShoppingListOverviewDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "version": {
+            "type": "number",
+            "description": "Se incrementa en cada cambio; base de la detección de conflictos."
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "deletedAt": {
+            "format": "date-time",
+            "type": "string",
+            "nullable": true,
+            "description": "No nulo = eliminado (lápida para sync)."
+          },
+          "name": {
+            "type": "string"
+          },
+          "itemCount": {
+            "type": "number"
+          },
+          "completedCount": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "version",
+          "createdAt",
+          "updatedAt",
+          "deletedAt",
+          "name",
+          "itemCount",
+          "completedCount"
+        ]
+      },
+      "CreateShoppingListDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "example": "Para el sábado"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "UUID generado por el cliente (opcional)."
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "ShoppingListDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "version": {
+            "type": "number",
+            "description": "Se incrementa en cada cambio; base de la detección de conflictos."
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "deletedAt": {
+            "format": "date-time",
+            "type": "string",
+            "nullable": true,
+            "description": "No nulo = eliminado (lápida para sync)."
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "version",
+          "createdAt",
+          "updatedAt",
+          "deletedAt",
+          "name"
+        ]
+      },
+      "ShoppingListItemDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "version": {
+            "type": "number",
+            "description": "Se incrementa en cada cambio; base de la detección de conflictos."
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "deletedAt": {
+            "format": "date-time",
+            "type": "string",
+            "nullable": true,
+            "description": "No nulo = eliminado (lápida para sync)."
+          },
+          "shoppingListId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "ingredientId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "ingredientName": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "number",
+            "nullable": true
+          },
+          "unit": {
+            "type": "string",
+            "enum": [
+              "ML",
+              "CL",
+              "OZ",
+              "DASH",
+              "DROP",
+              "BARSPOON",
+              "TEASPOON",
+              "TABLESPOON",
+              "GRAM",
+              "UNIT",
+              "SLICE",
+              "WEDGE",
+              "SPRIG",
+              "LEAF",
+              "PINCH",
+              "TOP_UP"
+            ],
+            "nullable": true
+          },
+          "completed": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "version",
+          "createdAt",
+          "updatedAt",
+          "deletedAt",
+          "shoppingListId",
+          "ingredientId",
+          "ingredientName",
+          "quantity",
+          "unit",
+          "completed"
+        ]
+      },
+      "ShoppingListDetailDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "version": {
+            "type": "number",
+            "description": "Se incrementa en cada cambio; base de la detección de conflictos."
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "deletedAt": {
+            "format": "date-time",
+            "type": "string",
+            "nullable": true,
+            "description": "No nulo = eliminado (lápida para sync)."
+          },
+          "name": {
+            "type": "string"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ShoppingListItemDto"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "version",
+          "createdAt",
+          "updatedAt",
+          "deletedAt",
+          "name",
+          "items"
+        ]
+      },
+      "UpdateShoppingListDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "example": "Para el sábado"
+          },
+          "version": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "CreateShoppingListItemDto": {
+        "type": "object",
+        "properties": {
+          "quantity": {
+            "type": "number",
+            "nullable": true
+          },
+          "unit": {
+            "type": "string",
+            "enum": [
+              "ML",
+              "CL",
+              "OZ",
+              "DASH",
+              "DROP",
+              "BARSPOON",
+              "TEASPOON",
+              "TABLESPOON",
+              "GRAM",
+              "UNIT",
+              "SLICE",
+              "WEDGE",
+              "SPRIG",
+              "LEAF",
+              "PINCH",
+              "TOP_UP"
+            ],
+            "nullable": true
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "ingredientId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "ingredientId"
+        ]
+      },
+      "UpdateShoppingListItemDto": {
+        "type": "object",
+        "properties": {
+          "quantity": {
+            "type": "number",
+            "nullable": true
+          },
+          "unit": {
+            "type": "string",
+            "enum": [
+              "ML",
+              "CL",
+              "OZ",
+              "DASH",
+              "DROP",
+              "BARSPOON",
+              "TEASPOON",
+              "TABLESPOON",
+              "GRAM",
+              "UNIT",
+              "SLICE",
+              "WEDGE",
+              "SPRIG",
+              "LEAF",
+              "PINCH",
+              "TOP_UP"
+            ],
+            "nullable": true
+          },
+          "completed": {
+            "type": "boolean"
+          },
+          "version": {
+            "type": "number"
+          }
+        }
+      },
+      "ManifestEntryDto": {
+        "type": "object",
+        "properties": {
+          "resourceType": {
+            "type": "string",
+            "enum": [
+              "RECIPE",
+              "INGREDIENT",
+              "TECHNIQUE",
+              "GLASSWARE",
+              "EQUIPMENT",
+              "CATEGORY"
+            ]
+          },
+          "resourceId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "version": {
+            "type": "number",
+            "description": "Si es mayor que la copia local, la copia está desactualizada."
+          },
+          "deleted": {
+            "type": "boolean",
+            "description": "true = el recurso dejó de publicarse."
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "resourceType",
+          "resourceId",
+          "version",
+          "deleted",
+          "updatedAt"
+        ]
+      },
+      "ManifestResponseDto": {
+        "type": "object",
+        "properties": {
+          "entries": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ManifestEntryDto"
+            }
+          },
+          "serverTime": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "entries",
+          "serverTime"
+        ]
+      },
+      "UserChangesDto": {
+        "type": "object",
+        "properties": {
+          "favorites": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FavoriteDto"
+            }
+          },
+          "inventory": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InventoryItemDto"
+            }
+          },
+          "shoppingLists": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ShoppingListDto"
+            }
+          },
+          "shoppingListItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ShoppingListItemDto"
+            }
+          }
+        },
+        "required": [
+          "favorites",
+          "inventory",
+          "shoppingLists",
+          "shoppingListItems"
+        ]
+      },
+      "ChangesResponseDto": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "description": "Cambios del contenido público.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ManifestEntryDto"
+            }
+          },
+          "user": {
+            "nullable": true,
+            "description": "Datos propios (incluye lápidas con deletedAt). null sin autenticación.",
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/UserChangesDto"
+              }
+            ]
+          },
+          "nextSince": {
+            "type": "string",
+            "description": "Cursor para la próxima llamada. Incluye una ventana de seguridad, así que pueden repetirse cambios ya recibidos: el cliente los aplica de forma idempotente por id y versión."
+          },
+          "serverTime": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "content",
+          "user",
+          "nextSince",
+          "serverTime"
+        ]
+      },
+      "SyncOperationDto": {
+        "type": "object",
+        "properties": {
+          "opId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Id único de la operación en la cola del cliente."
+          },
+          "entityType": {
+            "type": "string",
+            "enum": [
+              "FAVORITE",
+              "INVENTORY",
+              "SHOPPING_LIST",
+              "SHOPPING_LIST_ITEM"
+            ]
+          },
+          "action": {
+            "type": "string",
+            "enum": [
+              "UPSERT",
+              "DELETE"
+            ]
+          },
+          "entityId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "UUID del registro (generado por el cliente al crearlo)."
+          },
+          "baseVersion": {
+            "type": "number",
+            "nullable": true,
+            "description": "Versión del registro sobre la que el cliente hizo el cambio (null al crear)."
+          },
+          "payload": {
+            "type": "object",
+            "additionalProperties": true,
+            "description": "Estado completo del registro para UPSERT. FAVORITE {recipeId}; INVENTORY {ingredientId, quantity?, unit?, expirationDate?}; SHOPPING_LIST {name}; SHOPPING_LIST_ITEM {shoppingListId, ingredientId, quantity?, unit?, completed?}."
+          }
+        },
+        "required": [
+          "opId",
+          "entityType",
+          "action",
+          "entityId"
+        ]
+      },
+      "SyncPushDto": {
+        "type": "object",
+        "properties": {
+          "operations": {
+            "maxItems": 100,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SyncOperationDto"
+            }
+          }
+        },
+        "required": [
+          "operations"
+        ]
+      },
+      "SyncOperationResultDto": {
+        "type": "object",
+        "properties": {
+          "opId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "entityType": {
+            "type": "string",
+            "enum": [
+              "FAVORITE",
+              "INVENTORY",
+              "SHOPPING_LIST",
+              "SHOPPING_LIST_ITEM"
+            ]
+          },
+          "entityId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "APPLIED",
+              "MERGED",
+              "CONFLICT",
+              "REJECTED"
+            ],
+            "description": "APPLIED: aplicado. MERGED: ya existía el mismo registro con otro id (usar canonicalId). CONFLICT: no aplicado, gana el servidor (reemplazar la copia local por entity). REJECTED: inválido o sin permiso; descartar la operación."
+          },
+          "reason": {
+            "type": "string",
+            "enum": [
+              "STALE_VERSION",
+              "DELETED_ON_SERVER",
+              "DUPLICATE",
+              "NOT_FOUND",
+              "INVALID_PAYLOAD",
+              "UNKNOWN_INGREDIENT",
+              "RECIPE_NOT_AVAILABLE",
+              "PARENT_DELETED"
+            ]
+          },
+          "details": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "canonicalId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Id definitivo del registro si difiere de entityId."
+          },
+          "entity": {
+            "type": "object",
+            "additionalProperties": true,
+            "nullable": true,
+            "description": "Copia del servidor."
+          },
+          "replayed": {
+            "type": "boolean",
+            "description": "true = la operación ya se había procesado; se devuelve el resultado guardado."
+          }
+        },
+        "required": [
+          "opId",
+          "entityType",
+          "entityId",
+          "status",
+          "entity",
+          "replayed"
+        ]
+      },
+      "SyncPushResponseDto": {
+        "type": "object",
+        "properties": {
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SyncOperationResultDto"
+            }
+          },
+          "serverTime": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "results",
+          "serverTime"
+        ]
+      },
+      "RecommendDto": {
+        "type": "object",
+        "properties": {
+          "ingredientIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          "useInventory": {
+            "type": "boolean",
+            "description": "Usa el inventario guardado (requiere autenticación)."
+          },
+          "limit": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 10,
+            "default": 5
+          }
+        }
+      },
+      "RecommendationDto": {
+        "type": "object",
+        "properties": {
+          "recipeId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "recipeName": {
+            "type": "string"
+          },
+          "classification": {
+            "type": "string",
+            "enum": [
+              "EXACT_MATCH",
+              "ADAPTABLE",
+              "INCOMPLETE"
+            ]
+          },
+          "reasons": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "recipeId",
+          "recipeName",
+          "classification",
+          "reasons"
+        ]
+      },
+      "RecommendResponseDto": {
+        "type": "object",
+        "properties": {
+          "engine": {
+            "type": "string",
+            "example": "RULES",
+            "description": "Motor que generó la respuesta."
+          },
+          "llm": {
+            "type": "boolean",
+            "description": "false: no interviene un modelo de lenguaje (Fase 10)."
+          },
+          "recommendations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RecommendationDto"
+            }
+          }
+        },
+        "required": [
+          "engine",
+          "llm",
+          "recommendations"
+        ]
+      },
+      "SubstituteDto": {
+        "type": "object",
+        "properties": {
+          "ingredientId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Ingrediente a reemplazar."
+          },
+          "recipeId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Incluye sustituciones específicas de esta receta."
+          }
+        },
+        "required": [
+          "ingredientId"
+        ]
+      },
+      "RefDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ]
+      },
+      "SubstitutionOptionDto": {
+        "type": "object",
+        "properties": {
+          "substitute": {
+            "$ref": "#/components/schemas/RefDto"
+          },
+          "ratio": {
+            "type": "number"
+          },
+          "notes": {
+            "type": "string",
+            "nullable": true
+          },
+          "scope": {
+            "type": "string",
+            "enum": [
+              "GLOBAL",
+              "RECIPE"
+            ]
+          }
+        },
+        "required": [
+          "substitute",
+          "ratio",
+          "notes",
+          "scope"
+        ]
+      },
+      "SubstituteResponseDto": {
+        "type": "object",
+        "properties": {
+          "engine": {
+            "type": "string",
+            "example": "RULES",
+            "description": "Motor que generó la respuesta."
+          },
+          "llm": {
+            "type": "boolean",
+            "description": "false: no interviene un modelo de lenguaje (Fase 10)."
+          },
+          "ingredient": {
+            "$ref": "#/components/schemas/RefDto"
+          },
+          "substitutions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SubstitutionOptionDto"
+            }
+          }
+        },
+        "required": [
+          "engine",
+          "llm",
+          "ingredient",
+          "substitutions"
+        ]
+      },
+      "ExplainDto": {
+        "type": "object",
+        "properties": {
+          "techniqueId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Explicar una técnica (excluyente con recipeId)."
+          },
+          "recipeId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Explicar una receta o uno de sus pasos."
+          },
+          "stepNumber": {
+            "type": "number",
+            "minimum": 1
+          }
+        }
+      },
+      "ExplainStepDto": {
+        "type": "object",
+        "properties": {
+          "stepNumber": {
+            "type": "number"
+          },
+          "instruction": {
+            "type": "string"
+          },
+          "durationSeconds": {
+            "type": "number",
+            "nullable": true
+          }
+        },
+        "required": [
+          "stepNumber",
+          "instruction",
+          "durationSeconds"
+        ]
+      },
+      "ExplainTechniqueDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "instructions": {
+            "type": "string"
+          },
+          "commonMistakes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "description",
+          "instructions",
+          "commonMistakes"
+        ]
+      },
+      "ExplainResponseDto": {
+        "type": "object",
+        "properties": {
+          "engine": {
+            "type": "string",
+            "example": "RULES",
+            "description": "Motor que generó la respuesta."
+          },
+          "llm": {
+            "type": "boolean",
+            "description": "false: no interviene un modelo de lenguaje (Fase 10)."
+          },
+          "topic": {
+            "type": "string",
+            "enum": [
+              "TECHNIQUE",
+              "RECIPE",
+              "RECIPE_STEP"
+            ]
+          },
+          "title": {
+            "type": "string"
+          },
+          "summary": {
+            "type": "string"
+          },
+          "commonMistakes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "equipment": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "step": {
+            "$ref": "#/components/schemas/ExplainStepDto"
+          },
+          "steps": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ExplainStepDto"
+            }
+          },
+          "technique": {
+            "nullable": true,
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ExplainTechniqueDto"
+              }
+            ]
+          },
+          "sources": {
+            "description": "Recursos verificados usados para la respuesta.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "engine",
+          "llm",
+          "topic",
+          "title",
+          "summary",
+          "sources"
+        ]
+      }
+    }
+  }
+}
